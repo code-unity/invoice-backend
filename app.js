@@ -20,16 +20,17 @@ var config = require("./config/config.json");
 //MongoDb Connection :
 mongoose.connect(config.MONGO_URL,{useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true},function(err, conn){
     if(err){
-        console.log("Mongo Connection Error", err);
+        console.log("mongodb connection error", err);
     }
     if(!err && conn){
-        console.log("Mongo Connection Established");
+        console.log("mongodb connection stablished");
     }
 });
 
 
 
 //Routes Imported :
+var adminRouter = require("./routes/admin");
 
 
 
@@ -53,6 +54,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 
 //API Routes :
+app.use("/admin", adminRouter);
 
 
 

@@ -1,0 +1,5 @@
+# Dependencies Directory :
+node_modules/
+
+#Untill Dev :
+package-lock.json

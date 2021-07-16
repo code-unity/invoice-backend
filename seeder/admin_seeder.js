@@ -3,21 +3,17 @@ const bcrypt = require("bcrypt");
 var mongoose = require("mongoose");
 
 
-
 //Models Imported :
 var Admin = require("../models/admin");
-
 
 
 //Middleware's Imported :
 var config = require("../config/config.json");
 
 
-
 //Importing Constants :
 var constants_function = require("../constants/constants");
 var constants = constants_function("admin");
-
 
 
 //MongoDb Connection :
@@ -29,7 +25,6 @@ mongoose.connect(config.MONGO_URL,{useNewUrlParser: true, useUnifiedTopology: tr
         console.log("mongodb connection stablished");
     }
 });
-
 
 
 //Admin Credentials to add to mongodb: 
@@ -50,7 +45,6 @@ var admin = [
         phone_number: "6303999138"
     })
 ];
-
 
 
 //Creating new Admin :
@@ -83,7 +77,6 @@ for (var i=0; i<admin.length; i++) {
         }
     });
 }
-
 
 
 //Disconnecting Mongoose :

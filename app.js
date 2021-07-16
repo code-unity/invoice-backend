@@ -31,7 +31,7 @@ mongoose.connect(config.MONGO_URL,{useNewUrlParser: true, useUnifiedTopology: tr
 
 //Routes Imported :
 var adminRouter = require("./routes/admin");
-
+var clientRouter = require("./routes/client");
 
 
 //Express Application :
@@ -55,6 +55,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //API Routes :
 app.use("/admin", adminRouter);
+app.use("/client", clientRouter);
 
 
 

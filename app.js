@@ -8,6 +8,24 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var mongoose = require("mongoose");
+
+
+
+//Importing Config File :
+var config = require("./config/config.json");
+
+
+
+//MongoDb Connection :
+mongoose.connect(config.MONGO_URL,{useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true},function(err, conn){
+    if(err){
+        console.log("Mongo Connection Error", err);
+    }
+    if(!err && conn){
+        console.log("Mongo Connection Established");
+    }
+});
 
 
 

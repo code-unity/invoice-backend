@@ -1,6 +1,6 @@
 //Dependencies Imported :
 const jwt = require("jsonwebtoken");
-var config = require("../config/default.json");
+var config = require("../config/config.json");
 
 
 

@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-vars */
-
-
 //Dependencies Imported :
 var express = require("express");
 var router = express.Router();
@@ -29,7 +26,7 @@ var constants = constants_function("admin");
 
 
 //POST Request for SignIn :
-router.post("/", async(req, res, next)=>{
+router.post("/", async(req, res)=>{
 
     try {
 

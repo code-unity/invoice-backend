@@ -9,11 +9,17 @@ module.exports = function constants(model){
         //Request Un-Succesful (Status Code: 400) :
         UN_SUCCESSFUL: "request un-successful",
 
+        //Not found (Status Code: 400) :
+        MODEL_NOT_FOUND: model + " not found",
+
         //Post request (Status code: 201) :
         MODEL_CREATE: "request successful, " + model + " created succesfully",
 
-        //Mail exists (Status Code: 409) :
-        EMAIL_EXIST: "email already exists",
+        //Patch request (Status code: 200) :
+        MODEL_UPDATED: "request successful, " + model + " updated succesfully",
+
+        //delete request (Status code: 200) :
+        MODEL_DELETE: "request successful, " + model + " deleted succesfully",
 
         //Authorization Failed (Status Code: 401) :
         AUTHORIZATION_FAILED: "authorization failed, enter valid username or password",

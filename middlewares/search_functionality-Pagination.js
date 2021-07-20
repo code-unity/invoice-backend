@@ -72,7 +72,7 @@ module.exports = function SearchFunctionality_Pagination (model, query, array) {
                     "message": err.message
                 }
             });
-            console.log(err);
+            console.log(err);      
         }
     };
 };

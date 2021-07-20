@@ -32,7 +32,7 @@ mongoose.connect(config.MONGO_URL,{useNewUrlParser: true, useUnifiedTopology: tr
 //Routes Imported :
 var adminRouter = require("./routes/admin");
 var clientRouter = require("./routes/client");
-
+var invoiceRouter = require("./routes/invoice");
 
 //Express Application :
 var app = express();
@@ -56,7 +56,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //API Routes :
 app.use("/admin", adminRouter);
 app.use("/client", clientRouter);
-
+app.use("/invoice", clientRouter);
 
 
 // catch 404 and forward to error handler

@@ -56,7 +56,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //API Routes :
 app.use("/admin", adminRouter);
 app.use("/client", clientRouter);
-app.use("/invoice", clientRouter);
+app.use("/invoice", invoiceRouter);
 
 
 // catch 404 and forward to error handler

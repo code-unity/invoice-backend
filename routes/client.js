@@ -18,7 +18,7 @@ var Client_Validator = require("../validations/client_validations");
 
 
 // imported check authorizations :
-var Admin_Authorization = require("../check_authorization/admin_authorization");
+//var Admin_Authorization = require("../check_authorization/admin_authorization");
 
 
 //Importing Constants :
@@ -30,7 +30,7 @@ var constants = constants_function("client");
 
 const query = ["client_name", "date_of_contract"];
 // GET Request :
-router.get("/",SF_Pag(Client, query), Admin_Authorization, async(req, res)=>{
+router.get("/",SF_Pag(Client, query), async(req, res)=>{
 
     //Response :
     res.status(200).json({
@@ -46,7 +46,7 @@ router.get("/",SF_Pag(Client, query), Admin_Authorization, async(req, res)=>{
 
 
 //Post Request :
-router.post("/", Client_Validator(), Admin_Authorization, async(req, res)=>{
+router.post("/", Client_Validator(), async(req, res)=>{
 
     //Error Handling for Validations :
     const errors = validationResult(req);
@@ -104,7 +104,7 @@ router.post("/", Client_Validator(), Admin_Authorization, async(req, res)=>{
 
 
 //GET Request for client ID :
-router.get("/:client_id", Admin_Authorization, async(req, res)=>{
+router.get("/:client_id", async(req, res)=>{
     
     try{
 
@@ -151,7 +151,7 @@ router.get("/:client_id", Admin_Authorization, async(req, res)=>{
 
 
 //PATCH Request for client ID :
-router.patch("/:client_id", Client_Validator(), Admin_Authorization, async(req, res)=>{
+router.patch("/:client_id", Client_Validator(), async(req, res)=>{
 
     //Error Handling for Validations :
     const errors = validationResult(req);
@@ -221,7 +221,7 @@ router.patch("/:client_id", Client_Validator(), Admin_Authorization, async(req, 
 });
 
 //DELETE Request for client ID :
-router.delete("/:client_id", Admin_Authorization, async(req, res)=>{
+router.delete("/:client_id", async(req, res)=>{
     
     try{
 

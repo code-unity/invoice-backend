@@ -54,8 +54,25 @@ router.post("/", async(req, res)=>{
     //Taking Input Body :
     const {client, bill_from, date, due_date, items, sub_total, tax, total, amount_paid, balence_due, notes, terms} = req.body;
 
+    //invoice body : 
+    const invoice_data = {
+        _id: new mongoose.Types.ObjectId(),
+        client,
+        bill_from,
+        date,
+        due_date,
+        items,
+        sub_total,
+        tax,
+        total,
+        amount_paid,
+        balence_due,
+        notes,
+        terms
+    };
+
     //Template Path : 
-    var template_path =  __dirname.replace("routes", "templates") + "invoice.html";
+    var template_path =  __dirname.replace("routes", "templates") + "\\" + "invoice.html";
 
     //Reading HTML file :
     var templateHtml = fs.readFileSync(template_path, "utf-8");
@@ -82,35 +99,24 @@ router.post("/", async(req, res)=>{
     //Creating PDF with our format :
     const pdf = await page.pdf(options);
 
+    //Converting buffer type to binary64 :
+    const binary = Buffer.from(pdf).toString("base64");
+
     //Closing Browser :
     await browser.close();
 
     //Saving Json Body to mongodb :
-    const invoice =  new Invoice({
-        _id: new mongoose.Types.ObjectId(),
-        client,
-        bill_from,
-        date,
-        due_date,
-        items,
-        sub_total,
-        tax,
-        total,
-        amount_paid,
-        balence_due,
-        notes,
-        terms
-    });
+    const invoice =  new Invoice(invoice_data);
     const new_invoice = await invoice.save();
 
     //Response :
-    res.status(201).json({
+    res.status(201).send({
         "status": {
             "success": true,
             "code": 201,
             "message": constants.MODEL_CREATE
         },
-        "pdf": pdf,
+        "pdf": binary,
         "data": new_invoice
     });
 });

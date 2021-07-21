@@ -17,9 +17,9 @@ var clientSchema = mongoose.Schema({
     },
 
     //Validation for address :
-    address: {
+    billing_address: {
         type: String,
-        required: [true, "please enter address"]
+        required: [true, "please enter billing address"]
     },
 
     //Validation for shipping address :
@@ -38,6 +38,18 @@ var clientSchema = mongoose.Schema({
     payment_terms: {
         type: String,
         required: [true, "please enter payment terms"]
+    },
+
+    //Validation for payment terms :
+    notes: {
+        type: String,
+        required: false
+    },
+
+    //Validation for payment terms :
+    terms: {
+        type: String,
+        required: false
     },
 });
 

@@ -10,23 +10,24 @@ var path = require("path");
 var fs = require("fs");
 var puppeteer = require("puppeteer");
 var handlebars = require("handlebars");
-
+const { validationResult } = require("express-validator");
 
 
 //Middleware's Imported :
 var SF_Pag = require("../middlewares/search_functionality-Pagination");          //Middleware for Search-Functionality and Pagination
 
 
-
 //Models Imported :
 var Invoice =  require("../models/invoice");
 
+
+//Validations Imported :
+var Invoice_Validator = require("../validations/invoice_validations");
 
 
 //Importing Constants :
 var constants_function = require("../constants/constants");
 var constants = constants_function("invoice");
-
 
 
 //Crud Operations :
@@ -49,16 +50,34 @@ router.get("/",SF_Pag(Invoice), async(req, res)=>{
 
 
 //POST Request for pdf generation :
-router.post("/", async(req, res)=>{
+router.post("/", Invoice_Validator(), async(req, res)=>{
+
+    //Error Handling for Validations :
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+
+        //Respose for Validation Error :
+        console.log(errors.array());
+        return res.status(422).json({
+            "status": {
+                "success": false,
+                "code": 422,
+                "message": errors.array()[0].msg
+            }
+        });
+    }
 
     //Taking Input Body :
-    const {client, bill_from, date, due_date, items, sub_total, tax, total, amount_paid, balence_due, notes, terms} = req.body;
+    const {client, bill_from, bill_to, ship_to, payment_terms, date, due_date, items, sub_total, tax, total, amount_paid, balence_due, notes, terms} = req.body;
 
     //invoice body : 
     const invoice_data = {
         _id: new mongoose.Types.ObjectId(),
         client,
         bill_from,
+        bill_to,
+        ship_to,
+        payment_terms,
         date,
         due_date,
         items,
@@ -102,8 +121,8 @@ router.post("/", async(req, res)=>{
     //Creating PDF with our format :
     const pdf = await page.pdf(options);
 
-    //Converting buffer type to binary64 :
-    const binary = Buffer.from(pdf).toString("base64");
+    //Converting buffer type to base64 format :
+    const base64 = Buffer.from(pdf).toString("base64");
 
     //Closing Browser :
     await browser.close();
@@ -119,9 +138,56 @@ router.post("/", async(req, res)=>{
             "code": 201,
             "message": constants.MODEL_CREATE
         },
-        "pdf": binary,
+        "pdf": base64,
         "data": new_invoice
     });
+});
+
+
+
+//GET Request for Invoice ID :
+router.get("/:invoice_id", async(req, res)=>{
+    
+    try{
+
+        //Finding invoice by ID :
+        const id = req.params.invoice_id;
+        const invoice = await Invoice.findById(id);
+
+        if (invoice ==  null) {
+
+            //Response if invoice not found :
+            res.status(400).json({
+                "status": {
+                    "success": false,
+                    "code": 400,
+                    "message": constants.MODEL_NOT_FOUND
+                }
+            });
+        } else {
+
+            //Response :
+            res.status(200).json({
+                "status": {
+                    "success": true,
+                    "code": 200,
+                    "message": constants.SUCCESSFUL
+                },
+                "data": invoice
+            });
+        }
+
+    //Error Catching :
+    }catch(err){
+        res.status(400).json({
+            "status": {
+                "success": false,
+                "code": 400,
+                "message": err.message
+            }
+        });
+        console.log(err);
+    }
 });
 
 

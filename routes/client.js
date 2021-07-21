@@ -65,16 +65,18 @@ router.post("/", Client_Validator(), async(req, res)=>{
 
     try{
 
-        const {client_name, address, shipping_address, date_of_contract, payment_terms} = req.body;
+        const {client_name, billing_address, shipping_address, date_of_contract, payment_terms, notes, terms} = req.body;
 
         //Creating new client :
         const client = new Client({
             _id: new mongoose.Types.ObjectId(),
             client_name,
-            address,
+            billing_address,
             shipping_address,
             date_of_contract,
-            payment_terms
+            payment_terms,
+            notes,
+            terms
         });
         const new_client = await client.save();
 
@@ -186,14 +188,16 @@ router.patch("/:client_id", Client_Validator(), async(req, res)=>{
             });
         } else {
 
-            const {client_name, address, shipping_address, date_of_contract, payment_terms} = req.body;
+            const {client_name, billing_address, shipping_address, date_of_contract, payment_terms, notes, terms} = req.body;
 
             //Updating client :
             client.client_name = client_name;
-            client.address = address;
+            client.billing_address = billing_address;
             client.shipping_address = shipping_address;
             client.date_of_contract = date_of_contract;
             client.payment_terms = payment_terms;
+            client.notes = notes;
+            client.terms = terms;
             const new_client = await client.save();
 
             //Response :

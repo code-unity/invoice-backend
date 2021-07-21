@@ -13,7 +13,7 @@ module.exports = function client_validator() {
             .notEmpty().withMessage("Please enter client name").bail(),
 
         //Validation for address :
-        check("address")
+        check("billing_address")
             .notEmpty().withMessage("Please enter address").bail(),
 
         //Validation for shipping address :

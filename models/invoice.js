@@ -25,32 +25,64 @@ var invoiceSchema = mongoose.Schema({
         required: [true, "Please enter bill from"]
     },
 
+    //Validation for address :
+    bill_to: {
+        type: String,
+        required: [true, "please enter bill to"]
+    },
+
+    //Validation for shipping address :
+    ship_to: {
+        type: String,
+        required: [true, "please enter ship to"]
+    },
+
+    //Validation for payment terms :
+    payment_terms: {
+        type: String,
+        required: [true, "please enter payment terms"]
+    },
+
     //Validation for date :
     date: {
         type: Date,
-        required: [true, "Please Enter Expires at Date with format YYYY-MM-DD"]
+        required: [true, "Please Enter Date with format YYYY-MM-DD"]
     },
 
     //Validation for due date :
     due_date: {
         type: Date,
-        required: [true, "Please Enter Expires at Date with format YYYY-MM-DD"]
+        required: [true, "Please Enter Due Date with format YYYY-MM-DD"]
     },
 
     //Validation for items :
     items: [
         {
+            //Not creating id :
+            _id: false,
+
+            //Validation for item :
             item: {
                 type: String,
                 required: [true, "Please enter item"]
             },
+
+            //Validation for quantity :
             quantity: {
                 type: Number,
                 required: [true, "Please enter quantity"]
             },
+
+            //Validation for rate :
             rate: {
                 type: Number,
                 required: [true, "Please enter rate"]
+            },
+
+            //Validation for rate :
+            amount: {
+                type: Number,
+                required: [true, "Please enter amount"]
             }
         }
     ],
@@ -76,13 +108,13 @@ var invoiceSchema = mongoose.Schema({
     //Validation for Amount Paid :
     amount_paid: {
         type: Number,
-        required: [true, "Please enter amount paid"]
+        required: false
     },
 
     //Validation for Balence Due :
     balence_due: {
         type: Number,
-        required: [true, "Please enter balence due"]
+        required: false
     },
 
     //Validation for Balence Due :

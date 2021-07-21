@@ -9,6 +9,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var cors = require("cors");
 
 
 
@@ -45,6 +46,7 @@ app.set("view engine", "pug");
 
 
 
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

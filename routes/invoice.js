@@ -81,7 +81,7 @@ router.post("/", async(req, res)=>{
     var template = handlebars.compile(templateHtml);
     var finalHtml = encodeURIComponent(template(invoice_data));
 
-    //Format of our pdf
+    //Format of our pdf :
     var options = {
         format: "A4",
         printBackground: true
@@ -108,7 +108,7 @@ router.post("/", async(req, res)=>{
     //Closing Browser :
     await browser.close();
 
-    //Saving Json Body to mongodb :
+    //Saving Invoice Body to mongodb :
     const invoice =  new Invoice(invoice_data);
     const new_invoice = await invoice.save();
 

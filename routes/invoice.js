@@ -72,7 +72,7 @@ router.post("/", async(req, res)=>{
     };
 
     //Template Path : 
-    var template_path =  __dirname.replace("routes", "templates") + "\\" + "invoice.html";
+    var template_path =  __dirname.replace("routes", "templates") + "/" + "invoice.html";
 
     //Reading HTML file :
     var templateHtml = fs.readFileSync(template_path, "utf-8");

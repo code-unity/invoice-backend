@@ -88,7 +88,10 @@ router.post("/", async(req, res)=>{
     };
 
     //Launching Browser :
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        args: ["--no-sandbox"],
+        headless: true
+    });
     const page = await browser.newPage();
 
     //Launching our HTML page in browser :

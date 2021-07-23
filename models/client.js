@@ -30,8 +30,8 @@ var clientSchema = mongoose.Schema({
 
     //Validation for date of contract :
     date_of_contract: {
-        type: Date,
-        required: [true, "Enter date of contract with following format YYYY-MM-DD"]
+        type: String,
+        required: [true, "please Enter date of contract"]
     },
 
     //Validation for payment terms :

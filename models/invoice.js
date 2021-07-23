@@ -117,19 +117,19 @@ var invoiceSchema = mongoose.Schema({
         required: [true, "Please enter amount paid"]
     },
 
-    //Validation for Balence Due :
-    balence_due: {
+    //Validation for Balance Due :
+    balance_due: {
         type: Number,
-        required: [true, "Please enter balence due"]
+        required: [true, "Please enter balance due"]
     },
 
-    //Validation for Balence Due :
+    //Validation for notes :
     notes: {
         type: String,
         required: false
     },
 
-    //Validation for Balence Due :
+    //Validation for terms :
     terms: {
         type: String,
         required: false

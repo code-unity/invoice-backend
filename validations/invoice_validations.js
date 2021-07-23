@@ -60,6 +60,18 @@ module.exports = function client_validator() {
         check("tax")
             .notEmpty().withMessage("Please enter tax").bail(),
 
+        //Validation for discount :
+        check("discount")
+            .notEmpty().withMessage("Please enter discount").bail(),
+
+        //Validation for amount paid :
+        check("amount_paid")
+            .notEmpty().withMessage("Please enter amount paid").bail(),
+
+        //Validation for discount :
+        check("balance_due")
+            .notEmpty().withMessage("Please enter balance due").bail(),
+
         //Validation for payment terms :
         check("total")
             .notEmpty().withMessage("Please enter total").bail(),

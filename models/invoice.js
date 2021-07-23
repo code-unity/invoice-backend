@@ -105,16 +105,22 @@ var invoiceSchema = mongoose.Schema({
         required: [true, "Please enter total"]
     },
 
+    //Validation for discount :
+    discount: {
+        type: Number,
+        required: [true, "Please enter discount"]
+    },
+
     //Validation for Amount Paid :
     amount_paid: {
         type: Number,
-        required: false
+        required: [true, "Please enter amount paid"]
     },
 
     //Validation for Balence Due :
     balence_due: {
         type: Number,
-        required: false
+        required: [true, "Please enter balence due"]
     },
 
     //Validation for Balence Due :

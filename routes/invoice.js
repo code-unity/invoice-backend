@@ -68,7 +68,7 @@ router.post("/", Invoice_Validator(), async(req, res)=>{
     }
 
     //Taking Input Body :
-    const {client, bill_from, bill_to, ship_to, payment_terms, date, due_date, items, sub_total, tax, discount, total, amount_paid, balence_due, notes, terms} = req.body;
+    const {client, bill_from, bill_to, ship_to, payment_terms, date, due_date, items, sub_total, tax, discount, total, amount_paid, balance_due, notes, terms} = req.body;
 
     //invoice body : 
     const invoice_data = {
@@ -86,7 +86,7 @@ router.post("/", Invoice_Validator(), async(req, res)=>{
         discount,
         total,
         amount_paid,
-        balence_due,
+        balance_due,
         notes,
         terms
     };

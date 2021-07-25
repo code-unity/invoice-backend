@@ -119,7 +119,7 @@
                 <div class="row">
                     <div class="col-6">
                         <img src="default-logo (1).png" alt="Company logo">
-                        <p class="text-black" style="padding-top: 15px;">description: {{description}}</p>
+                        <p class="text-black" style="padding-top: 15px;">Bill from: {{bill_from}}</p>
                     </div>
                     <div class="col-6">
                         <div class="company-details">
@@ -140,7 +140,7 @@
                         <p class="sub-heading">Date: {{date}}</p>
                         <p class="sub-heading">Payment terms: {{payment_terms}}</p>
                         <p class="sub-heading">Due Date: {{due_date}}</p>
-                        <p class="sub-heading2">Balance Due: {{balence_due}}</p>
+                        <p class="sub-heading2">Balance Due: {{balance_due}}</p>
                     </div>
                 </div>
             </div>
@@ -174,8 +174,12 @@
                             <td>{{tax}}</td>
                         </tr>
                         <tr>
-                            <td colspan="3" class="text-right">Grand Total:</td>
-                            <td>{{grand_total}}</td>
+                            <td colspan="3" class="text-right">Discount:</td>
+                            <td>{{discount}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-right">Total:</td>
+                            <td>{{total}}</td>
                         </tr>
                         <tr>
                             <td colspan="3" class="text-right">Amount Paid:</td>

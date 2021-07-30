@@ -22,8 +22,7 @@ module.exports = function client_validator() {
 
         //Validation for date of contract :
         check("date_of_contract")
-            .notEmpty().withMessage("Please enter date of contract").bail()
-            .isDate().withMessage("Please enter due of contract with format yyyy-mm-dd"),
+            .notEmpty().withMessage("Please enter date of contract").bail(),
 
         //Validation for payment terms :
         check("payment_terms")

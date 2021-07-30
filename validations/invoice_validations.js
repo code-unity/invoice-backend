@@ -30,11 +30,13 @@ module.exports = function client_validator() {
 
         //Validation for date of contract :
         check("date")
-            .notEmpty().withMessage("Please enter date of contract").bail(),
+            .notEmpty().withMessage("Please enter date").bail()
+            .isDate().withMessage("Please enter date with format yyyy-mm-dd"),
         
         //Validation for date of contract :
         check("due_date")
-            .notEmpty().withMessage("Please enter date of contract").bail(),
+            .notEmpty().withMessage("Please enter due date").bail()
+            .isDate().withMessage("Please enter due date with format yyyy-mm-dd"),
             
         //Validation for tax :
         check("items.*.item")

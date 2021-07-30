@@ -193,4 +193,53 @@ router.get("/:invoice_id", async(req, res)=>{
 
 
 
+//DELETE Request for invoice ID :
+router.delete("/:invoice_id", async(req, res)=>{
+    
+    try{
+
+        //Finding invoice :
+        const id = req.params.invoice_id;
+        const invoice = await Invoice.findById(id);
+
+        if (invoice ==  null) {
+
+            //Response if invoice not found :
+            res.status(400).json({
+                "status": {
+                    "success": false,
+                    "code": 400,
+                    "message": constants.MODEL_NOT_FOUND
+                }
+            });
+        } else {
+
+            //Deleting invoice :
+            await Invoice.deleteOne({_id: id});
+
+            //Response :
+            res.status(200).json({
+                "status": {
+                    "success": true,
+                    "code": 200,
+                    "message": constants.MODEL_DELETE
+                }
+            });
+        }
+
+    //Error Catching :
+    }catch(err){
+        res.status(400).json({
+            "status": {
+                "success": false,
+                "code": 400,
+                "message": err.message
+            }
+        });
+        console.log(err);
+    }
+});
+
+
+
 module.exports = router;

@@ -45,14 +45,14 @@ var invoiceSchema = mongoose.Schema({
 
     //Validation for date :
     date: {
-        type: String,
-        required: [true, "Please Enter Date"]
+        type: Date,
+        required: [true, "Please Enter Date with format yyyy-mm-dd"]
     },
 
     //Validation for due date :
     due_date: {
-        type: String,
-        required: [true, "Please Enter Due Date"]
+        type: Date,
+        required: [true, "Please Enter Due Date with format yyyy-mm-dd"]
     },
 
     //Validation for items :

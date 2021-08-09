@@ -12,17 +12,17 @@ var invoiceSchema = mongoose.Schema({
     //Object ID : (Unique ID, automatically created by MongoDb)
     _id: mongoose.Schema.Types.ObjectId,
 
-    //Validation for Bill from :
-    invoice_number: {
-        type: String,
-        required: [true, "Please enter invoice number"]
-    },
-
     //Validation for client :
     client: {
         type: mongoose.Schema.Types.ObjectId,
         ref: Client,
         required: [true, "Please enter client id"]
+    },
+
+    //Validation for Bill from :
+    invoice_number: {
+        type: String,
+        required: [true, "Please enter invoice number"]
     },
 
     //Validation for Bill from :

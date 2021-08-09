@@ -12,6 +12,12 @@ var invoiceSchema = mongoose.Schema({
     //Object ID : (Unique ID, automatically created by MongoDb)
     _id: mongoose.Schema.Types.ObjectId,
 
+    //Validation for Bill from :
+    invoice_number: {
+        type: String,
+        required: [true, "Please enter invoice number"]
+    },
+
     //Validation for client :
     client: {
         type: mongoose.Schema.Types.ObjectId,
@@ -69,19 +75,19 @@ var invoiceSchema = mongoose.Schema({
 
             //Validation for quantity :
             quantity: {
-                type: Number,
+                type: String,
                 required: [true, "Please enter quantity"]
             },
 
             //Validation for rate :
             rate: {
-                type: Number,
+                type: String,
                 required: [true, "Please enter rate"]
             },
 
             //Validation for rate :
             amount: {
-                type: Number,
+                type: String,
                 required: [true, "Please enter amount"]
             }
         }
@@ -89,37 +95,37 @@ var invoiceSchema = mongoose.Schema({
 
     //Validation for sub total :
     sub_total: {
-        type: Number,
+        type: String,
         required: [true, "Please enter sub total"]
     },
 
     //Validation for tax :
     tax: {
-        type: Number,
+        type: String,
         required: [true, "Please enter tax"]
     },
 
     //Validation for total :
     total: {
-        type: Number,
+        type: String,
         required: [true, "Please enter total"]
     },
 
     //Validation for discount :
     discount: {
-        type: Number,
+        type: String,
         required: [true, "Please enter discount"]
     },
 
     //Validation for Amount Paid :
     amount_paid: {
-        type: Number,
+        type: String,
         required: [true, "Please enter amount paid"]
     },
 
     //Validation for Balance Due :
     balance_due: {
-        type: Number,
+        type: String,
         required: [true, "Please enter balance due"]
     },
 

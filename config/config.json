@@ -1,6 +1,6 @@
 {
-    "MONGO_ATLAS_PW" : "back_end",
-    "MONGO_ATLAS_USER" : "back_end",
-    "MONGO_URL" : "mongodb+srv://back_end:back_end@cluster0.qfyiz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "MONGO_ATLAS_PW" : "add mongodb password",
+    "MONGO_ATLAS_USER" : "add mongodb username",
+    "MONGO_URL" : "add mongodb url",
     "ADMIN_JWT_KEY" : "1234"
 }

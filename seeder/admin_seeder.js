@@ -31,19 +31,25 @@ mongoose.connect(config.MONGO_URL,{useNewUrlParser: true, useUnifiedTopology: tr
 var admin = [
     new Admin({
         _id: new mongoose.Types.ObjectId(),
-        username: "saiganesh",
-        email :"2018Ceb1028@iitrpr.ac.in",
-        password: bcrypt.hashSync("Saiganesh1",10).toString(),
-        phone_number: "9110376162"
-    }),     
-
+        username: "admin",
+        email :"admin@codeunity.co",
+        password: bcrypt.hashSync("codeunity@1",10).toString(),
+        phone_number: "9951207401"
+    }),
     new Admin({
         _id: new mongoose.Types.ObjectId(),
-        username: "dheeraj",
-        email :"2018chb1053@iitrpr.ac.in",
-        password: bcrypt.hashSync("Dheeraj1",10).toString(),
-        phone_number: "6303999138"
-    })
+        username: "admin",
+        email :"yaswanth@codeunity.co",
+        password: bcrypt.hashSync("codeunity@1",10).toString(),
+        phone_number: "9030656522"
+    }),
+    new Admin({
+        _id: new mongoose.Types.ObjectId(),
+        username: "admin",
+        email :"ranjith@codeunity.co",
+        password: bcrypt.hashSync("codeunity@1",10).toString(),
+        phone_number: "9840572927"
+    }),
 ];
 
 

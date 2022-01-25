@@ -33,21 +33,21 @@ var admin = [
         _id: new mongoose.Types.ObjectId(),
         username: "admin",
         email :"admin@codeunity.co",
-        password: bcrypt.hashSync("codeunity@1",10).toString(),
+        password: bcrypt.hashSync("Codeunity@1",10).toString(),
         phone_number: "9951207401"
     }),
     new Admin({
         _id: new mongoose.Types.ObjectId(),
         username: "admin",
         email :"yaswanth@codeunity.co",
-        password: bcrypt.hashSync("codeunity@1",10).toString(),
+        password: bcrypt.hashSync("Codeunity@1",10).toString(),
         phone_number: "9030656522"
     }),
     new Admin({
         _id: new mongoose.Types.ObjectId(),
         username: "admin",
         email :"ranjith@codeunity.co",
-        password: bcrypt.hashSync("codeunity@1",10).toString(),
+        password: bcrypt.hashSync("Codeunity@1",10).toString(),
         phone_number: "9840572927"
     }),
 ];

@@ -1,6 +1,6 @@
 {
     "MONGO_ATLAS_PW" : "add mongodb password",
     "MONGO_ATLAS_USER" : "add mongodb username",
-    "MONGO_URL" : "add mongodb url",
+    "MONGO_URL" : "mongodb://localhost:27017/invoice",
     "ADMIN_JWT_KEY" : "1234"
 }

@@ -40,7 +40,7 @@ var invoiceSchema = mongoose.Schema({
     //Validation for shipping address :
     ship_to: {
         type: String,
-        required: [true, "please enter ship to"]
+        required: false
     },
 
     //Validation for payment terms :
@@ -102,7 +102,7 @@ var invoiceSchema = mongoose.Schema({
     //Validation for tax :
     tax: {
         type: String,
-        required: [true, "Please enter tax"]
+        required:false
     },
 
     //Validation for total :
@@ -114,7 +114,7 @@ var invoiceSchema = mongoose.Schema({
     //Validation for discount :
     discount: {
         type: String,
-        required: [true, "Please enter discount"]
+        required: false
     },
 
     //Validation for Amount Paid :

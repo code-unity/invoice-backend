@@ -3,7 +3,7 @@ var express = require("express");
 var router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const auth = require('../check_authorization/admin_authorization');
 
 
 //Models Imported :
@@ -27,7 +27,6 @@ var constants = constants_function("admin");
 
 //POST Request for SignIn :
 router.post("/", async(req, res)=>{
-
     try {
 
         const {username, password} = req.body;
@@ -106,6 +105,30 @@ router.post("/", async(req, res)=>{
         console.log(err);
     }
 });
+router.get("/address",auth, async(req, res)=>{
+    try{
+        const admin = await Admin.find({email:req.adminData.email});
+       return  res.status(200).json({
+            "status": {
+                "success": true,
+                "code": 200,
+                "message": constants.SUCCESFUL
+            },
+            address: admin[0].address
+        });
+       
+    }
+    catch(err){
+        res.status(400).json({
+        "status": {
+            "success": false,
+            "code": 400,
+            "message": err.message
+        }
+    });
+    console.log(err);
+    }
+})
   
 
 

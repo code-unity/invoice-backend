@@ -34,26 +34,30 @@ var admin = [
         username: "admin",
         email :"admin@codeunity.co",
         password: bcrypt.hashSync("Codeunity@1",10).toString(),
-        phone_number: "9951207401"
+        phone_number: "9951207401",
+        role: 'admin'
     }),
     new Admin({
         _id: new mongoose.Types.ObjectId(),
         username: "admin",
         email :"yaswanth@codeunity.co",
         password: bcrypt.hashSync("Codeunity@1",10).toString(),
-        phone_number: "9030656522"
+        phone_number: "9030656522",
+        role: 'admin'
     }),
     new Admin({
         _id: new mongoose.Types.ObjectId(),
         username: "admin",
         email :"ranjith@codeunity.co",
         password: bcrypt.hashSync("Codeunity@1",10).toString(),
-        phone_number: "9840572927"
+        phone_number: "9840572927",
+        role: 'admin'
     }),
 ];
 
 
 //Creating new Admin :
+
 var done = 0;
 for (var i=0; i<admin.length; i++) {
     admin[i].save(function(err) {

@@ -33,7 +33,7 @@ router.post("/", async(req, res)=>{
         const {username, password} = req.body;
 
         //Finding Admin with username :
-        const admin = await Admin.find({username: username});
+        const admin = await Admin.find({username: username, role:'admin'});
 
         //Returning Error if Admin Not Found
         if (admin.length < 1) {
@@ -80,7 +80,10 @@ router.post("/", async(req, res)=>{
                         "code": 200,
                         "message": constants.AUTHORIZATION_SUCCESFUL
                     },
-                    token: token
+                    "data": {
+                        token: token,
+                        role: admin[0].role,                   
+                    }
                 });
             }
 

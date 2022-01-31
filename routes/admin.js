@@ -33,7 +33,7 @@ router.post("/", async(req, res)=>{
         const {username, password} = req.body;
 
         //Finding Admin with username :
-        const admin = await Admin.find({username: username, role:'admin'});
+        const admin = await Admin.find({username: username});
 
         //Returning Error if Admin Not Found
         if (admin.length < 1) {

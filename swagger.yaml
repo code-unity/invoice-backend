@@ -1,0 +1,383 @@
+openapi: 3.0.0
+info:
+  title: Invoice backend
+  description:  Invoice API docs
+  version: 1.0.0
+paths:
+  /candidate:
+    post:
+      tags:
+      - "candidate"
+      description: "Create candidates"
+      requestBody:
+       description: Schema of candidate
+       required: true
+       content:
+        application/json:
+         schema:
+          $ref: '#/components/schemas/Candidate'
+      responses:
+        "201":
+          description: Success Request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: true
+                 code:
+                  type: "integer"
+                  example: 201
+                 message:
+                   type: "string"
+                   example: request successful candidate created succesfully
+        "400":
+          description: Failed request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: false
+                 code:
+                  type: "integer"
+                  example: 400
+                 message:
+                   type: "string"
+                   example: error message
+                        
+    get:
+      tags:
+      - "candidate"
+      description: "Get All Candidates"
+      responses:
+        "200":
+          description: Success Request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: true
+                 code:
+                  type: "integer"
+                  example: 200
+                 message:
+                   type: "string"
+                   example: request successful 
+               data:
+                type: "array"
+                items:
+                 type: "object"
+                 properties:
+                  id:
+                   type: "string"
+                   example: 61f9446265ade063b02174c8
+                  username:
+                   type: "string"
+                   example: "Harshith"
+                  email:
+                   type: "string"
+                   example: "example.p@gmail.com"
+                  date_of_birth:
+                   type: "string"
+                   example: "2/1/1998"
+                  assigned_to:
+                   type: "string"
+                   example: "details"
+                  date_of_Joining:
+                   type: "string"
+                   example: "1/7/2021"
+                  payment_terms:
+                   type: "string"
+                   example: "Terms"
+                  role:
+                   type: "string"
+                   example: "Candidate"
+        "400":
+          description: Failed request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: false
+                 code:
+                  type: "integer"
+                  example: 400
+                 message:
+                   type: "string"
+                   example: No candidates or error message
+          
+  /candidate/{candidate_id}:
+    put:
+      tags:
+      - "candidate"
+      description: "Updates a Candidate"
+      parameters:
+      - name: candidate_id
+        required: true
+        in: path
+        schema:
+          type: integer
+      requestBody:
+       description: Schema of PUT Request
+       required: true
+       content:
+        application/json:
+         schema:
+          anyOf:
+            - $ref: '#/components/schemas/PutRequestExample1'
+            - $ref: '#/components/schemas/PutRequestExample2'
+      responses:
+        "200":
+          description: Success Request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: true
+                 code:
+                  type: "integer"
+                  example: 204
+                 message:
+                   type: "string"
+                   example: request successful candidate updated successfully
+        "400":
+          description: Failed request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: false
+                 code:
+                  type: "integer"
+                  example: 400
+                 message:
+                   type: "string"
+                   example: candidate not found or error message
+    get:
+      tags:
+      - "candidate"
+      description: "Get Candidate"
+      parameters:
+      - name: candidate_id
+        required: true
+        in: path
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Success Request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: true
+                 code:
+                  type: "integer"
+                  example: 200
+                 message:
+                   type: "string"
+                   example: request successful
+               data:
+                type: "object"
+                properties:
+                  id:
+                   type: "string"
+                   example: 61f9446265ade063b02174c8
+                  username:
+                   type: "string"
+                   example: "Harshith"
+                  email:
+                   type: "string"
+                   example: "example.p@gmail.com"
+                  date_of_birth:
+                   type: "string"
+                   example: "2/1/1998"
+                  assigned_to:
+                   type: "string"
+                   example: "details"
+                  date_of_Joining:
+                   type: "string"
+                   example: "1/7/2021"
+                  payment_terms:
+                   type: "string"
+                   example: "Terms"
+                  role:
+                   type: "string"
+                   example: "Candidate"
+               
+        "400":
+          description: Failed request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: false
+                 code:
+                  type: "integer"
+                  example: 400
+                 message:
+                   type: "string"
+                   example: candidate not found or error message  
+          
+    delete:
+      tags:
+      - "candidate"
+      description: "Delete Candidate"
+      parameters:
+      - name: candidate_id
+        required: true
+        in: path
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Success Request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: true
+                 code:
+                  type: "integer"
+                  example: 204
+                 message:
+                   type: "string"
+                   example: request successful candidate deleted successfully
+        "400":
+          description: Failed request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: false
+                 code:
+                  type: "integer"
+                  example: 400
+                 message:
+                   type: "string"
+                   example: candidate not found or error message
+          
+components:
+  schemas:
+    Candidate:
+     type: "object"
+     required:
+     - "username"
+     - "email"
+     properties:
+      username:
+        type: "string"
+        example: "Harshith"
+      email:
+        type: "string"
+        example: "example.p@gmail.com"
+      date_of_birth:
+        type: "string"
+        example: "2/1/1998"
+      assigned_to:
+        type: "string"
+        example: "details"
+      date_of_Joining:
+        type: "string"
+        example: "1/7/2021"
+      payment_terms:
+        type: "string"
+        example: "Terms"
+      role:
+        type: "string"
+        example: "Candidate"
+    PutRequestExample1:
+     type: "object"
+     required:
+     - "username"
+     - "email"
+     properties:
+      email:
+        type: "string"
+        example: "example.p@gmail.com"
+      date_of_birth:
+        type: "string"
+        example: "2/1/1998"
+      date_of_Joining:
+        type: "string"
+        example: "1/7/2021"
+      payment_terms:
+        type: "string"
+        example: "Terms"
+    PutRequestExample2:
+     type: "object"
+     required:
+     - "username"
+     - "email"
+     properties:
+      username:
+        type: "string"
+        example: "Harshith"
+      assigned_to:
+        type: "string"
+        example: "details"
+      date_of_Joining:
+        type: "string"
+        example: "1/7/2021"
+      payment_terms:
+        type: "string"
+        example: "Terms"

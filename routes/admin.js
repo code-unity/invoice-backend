@@ -3,7 +3,6 @@ var express = require("express");
 var router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const auth = require('../check_authorization/admin_authorization');
 
 
 //Models Imported :
@@ -13,6 +12,8 @@ var Admin = require("../models/admin");
 
 //Middleware's Imported :
 var config = require("../config/config.json");
+const auth = require('../check_authorization/admin_authorization');
+
 
 
 

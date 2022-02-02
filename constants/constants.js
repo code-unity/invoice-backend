@@ -12,6 +12,9 @@ module.exports = function constants(model){
         //Not found (Status Code: 400) :
         MODEL_NOT_FOUND: model + " not found",
 
+        //Not found (Status Code: 400) :
+        MODELS_NOT_FOUND: "No "+ model +"s",
+
         //Post request (Status code: 201) :
         MODEL_CREATE: "request successful, " + model + " created succesfully",
 

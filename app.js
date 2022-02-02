@@ -12,10 +12,8 @@ var mongoose = require("mongoose");
 var cors = require("cors");
 
 
-
 //Importing Config File :
 var config = require("./config/config.json");
-
 
 
 //MongoDb Connection :
@@ -34,6 +32,7 @@ mongoose.connect(config.MONGO_URL,{useNewUrlParser: true, useUnifiedTopology: tr
 var adminRouter = require("./routes/admin");
 var clientRouter = require("./routes/client");
 var invoiceRouter = require("./routes/invoice");
+var candidateRouter = require("./routes/candidate");
 
 //Express Application :
 var app = express();
@@ -59,6 +58,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/admin", adminRouter);
 app.use("/client", clientRouter);
 app.use("/invoice", invoiceRouter);
+app.use("/candidate", candidateRouter);
+
 
 
 // catch 404 and forward to error handler

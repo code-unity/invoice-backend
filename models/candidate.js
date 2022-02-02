@@ -55,7 +55,10 @@ var candidateSchema = mongoose.Schema({
         type: String,
         required: [true, "please enter Role"],
     },
-
+    isActive:{
+        type: Boolean,
+        default:true
+    },
    
 });
 

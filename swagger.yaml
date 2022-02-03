@@ -54,7 +54,7 @@ paths:
                   example: 400
                  message:
                    type: "string"
-                   example: error message
+                   example: request un-successful
                         
     get:
       tags:
@@ -109,6 +109,9 @@ paths:
                   role:
                    type: "string"
                    example: "Candidate"
+                  isActive:
+                   type: "boolean"
+                   example: true
         "400":
           description: Failed request
           content:
@@ -245,6 +248,9 @@ paths:
                   role:
                    type: "string"
                    example: "Candidate"
+                  isActive:
+                   type: "boolean"
+                   example: true
                
         "400":
           description: Failed request

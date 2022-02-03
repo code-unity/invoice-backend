@@ -12,7 +12,7 @@ var constants = constants_function("candidate");
 router.get("/", async (req, res) => {
 
     try {
-        const candidate = await Candidate.find({});
+        const candidate = await Candidate.find({isActive:true});
 
         if (candidate && candidate.length === 0) {
 

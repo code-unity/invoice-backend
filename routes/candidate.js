@@ -63,7 +63,7 @@ router.post('/', async (req, res) => {
             "status": {
                 "success": false,
                 "code": 400,
-                "message": err._message
+                "message": err.message
             }
         });
     }

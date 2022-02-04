@@ -92,10 +92,10 @@ router.post("/", Client_Validator(), async(req, res)=>{
 
     //Error Catching :
     }catch(err){
-        res.status(400).json({
+        res.status(500).json({
             "status": {
                 "success": false,
-                "code": 400,
+                "code": 500,
                 "message": err.message
             }
         });
@@ -139,10 +139,10 @@ router.get("/:client_id", async(req, res)=>{
 
     //Error Catching :
     }catch(err){
-        res.status(400).json({
+        res.status(500).json({
             "status": {
                 "success": false,
-                "code": 400,
+                "code": 500,
                 "message": err.message
             }
         });
@@ -179,10 +179,10 @@ router.patch("/:client_id", Client_Validator(), async(req, res)=>{
         if (client ==  null) {
 
             //Response if client not found :
-            res.status(400).json({
+            res.status(404).json({
                 "status": {
                     "success": false,
-                    "code": 400,
+                    "code": 404,
                     "message": constants.MODEL_NOT_FOUND
                 }
             });
@@ -213,10 +213,10 @@ router.patch("/:client_id", Client_Validator(), async(req, res)=>{
 
     //Error Catching :
     }catch(err){
-        res.status(400).json({
+        res.status(500).json({
             "status": {
                 "success": false,
-                "code": 400,
+                "code": 500,
                 "message": err.message
             }
         });
@@ -260,10 +260,10 @@ router.delete("/:client_id", async(req, res)=>{
 
     //Error Catching :
     }catch(err){
-        res.status(400).json({
+        res.status(500).json({
             "status": {
                 "success": false,
-                "code": 400,
+                "code": 500,
                 "message": err.message
             }
         });

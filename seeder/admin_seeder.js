@@ -32,42 +32,16 @@ var admin = [
     new Admin({
         _id: new mongoose.Types.ObjectId(),
         username: "admin",
-        email :"admin@codeunity.co",
+        email :"example@gmail.com",
         password: bcrypt.hashSync("Codeunity@1",10).toString(),
         phone_number: "9951207401",
         address:"CODEUNITY TECHNOLOGIES PVT LTD\n" +
         "1/32, Brahmin street, Nagari, Chittoor Dt, AP, 517590\n" +
         "9030656522\n" +
         "admin@codeunity.co\n" +
-        "PAN: AAICC9010B\n" +
-        "GSTIN: 37AAICC9010B1Z1"
-    }),
-    new Admin({
-        _id: new mongoose.Types.ObjectId(),
-        username: "admin",
-        email :"yaswanth@codeunity.co",
-        password: bcrypt.hashSync("Codeunity@1",10).toString(),
-        phone_number: "9030656522",
-        address:"CODEUNITY TECHNOLOGIES PVT LTD\n" +
-        "1/32, Brahmin street, Nagari, Chittoor Dt, AP, 517590\n" +
-        "9030656522\n" +
-        "admin@codeunity.co\n" +
-        "PAN: AAICC9010B\n" +
-        "GSTIN: 37AAICC9010B1Z1"
-    }),
-    new Admin({
-        _id: new mongoose.Types.ObjectId(),
-        username: "admin",
-        email :"ranjith@codeunity.co",
-        password: bcrypt.hashSync("Codeunity@1",10).toString(),
-        phone_number: "9840572927",
-        address:"CODEUNITY TECHNOLOGIES PVT LTD\n" +
-        "1/32, Brahmin street, Nagari, Chittoor Dt, AP, 517590\n" +
-        "9030656522\n" +
-        "admin@codeunity.co\n" +
-        "PAN: AAICC9010B\n" +
-        "GSTIN: 37AAICC9010B1Z1"
-    }),
+        "PAN: FGNPP9010B\n" +
+        "GSTIN: 47BBICC9010B1Z1"
+    })
 ];
 
 

@@ -37,7 +37,7 @@ paths:
                    type: "string"
                    example: request successful candidate created succesfully
         "400":
-          description: Failed request
+          description: Bad Request
           content:
            application/json:
             schema:
@@ -54,7 +54,26 @@ paths:
                   example: 400
                  message:
                    type: "string"
-                   example: request un-successful
+                   example: Please enter ____
+        "500":
+          description: Failed request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: false
+                 code:
+                  type: "integer"
+                  example: 500
+                 message:
+                   type: "string"
+                   example: error message
                         
     get:
       tags:
@@ -112,7 +131,7 @@ paths:
                   isActive:
                    type: "boolean"
                    example: true
-        "400":
+        "404":
           description: Failed request
           content:
            application/json:
@@ -127,10 +146,29 @@ paths:
                   example: false
                  code:
                   type: "integer"
-                  example: 400
+                  example: 404
                  message:
                    type: "string"
-                   example: No candidates or error message
+                   example: No candidates 
+        "500":
+          description: Failed request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: false
+                 code:
+                  type: "integer"
+                  example: 500
+                 message:
+                   type: "string"
+                   example: error message
           
   /candidate/{candidate_id}:
     put:
@@ -149,9 +187,7 @@ paths:
        content:
         application/json:
          schema:
-          anyOf:
-            - $ref: '#/components/schemas/PutRequestExample1'
-            - $ref: '#/components/schemas/PutRequestExample2'
+          $ref: '#/components/schemas/Candidate'
       responses:
         "200":
           description: Success Request
@@ -173,7 +209,7 @@ paths:
                    type: "string"
                    example: request successful candidate updated successfully
         "400":
-          description: Failed request
+          description: Bad request
           content:
            application/json:
             schema:
@@ -190,7 +226,45 @@ paths:
                   example: 400
                  message:
                    type: "string"
-                   example: candidate not found or error message
+                   example: Please enter ____
+        "404":
+          description: Failed request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: false
+                 code:
+                  type: "integer"
+                  example: 404
+                 message:
+                   type: "string"
+                   example: candidate not found
+        "500":
+          description: Failed request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: false
+                 code:
+                  type: "integer"
+                  example: 500
+                 message:
+                   type: "string"
+                   example: error message
     get:
       tags:
       - "candidate"
@@ -251,8 +325,7 @@ paths:
                   isActive:
                    type: "boolean"
                    example: true
-               
-        "400":
+        "404":
           description: Failed request
           content:
            application/json:
@@ -267,10 +340,29 @@ paths:
                   example: false
                  code:
                   type: "integer"
-                  example: 400
+                  example: 404
                  message:
                    type: "string"
-                   example: candidate not found or error message  
+                   example: candidate not found  
+        "500":
+          description: Failed request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: false
+                 code:
+                  type: "integer"
+                  example: 500
+                 message:
+                   type: "string"
+                   example: error message   
           
     delete:
       tags:
@@ -302,7 +394,7 @@ paths:
                  message:
                    type: "string"
                    example: request successful candidate deleted successfully
-        "400":
+        "404":
           description: Failed request
           content:
            application/json:
@@ -317,20 +409,43 @@ paths:
                   example: false
                  code:
                   type: "integer"
-                  example: 400
+                  example: 404
                  message:
                    type: "string"
-                   example: candidate not found or error message
-          
+                   example: candidate not found
+        "500":
+          description: Failed request
+          content:
+           application/json:
+            schema:
+              type: "object"
+              properties:
+               status:
+                type: "object"
+                properties:
+                 success:
+                  type: "boolean"
+                  example: false
+                 code:
+                  type: "integer"
+                  example: 500
+                 message:
+                   type: "string"
+                   example: error message
+ 
 components:
   schemas:
     Candidate:
      type: "object"
      required:
-     - "username"
+     - "name"
      - "email"
+     - "date_of_birth"
+     - "assigned_to"
+     - "date_of_Joining"
+     - "payment_terms"
      properties:
-      username:
+      name:
         type: "string"
         example: "Harshith"
       email:
@@ -339,45 +454,6 @@ components:
       date_of_birth:
         type: "string"
         example: "2/1/1998"
-      assigned_to:
-        type: "string"
-        example: "details"
-      date_of_Joining:
-        type: "string"
-        example: "1/7/2021"
-      payment_terms:
-        type: "string"
-        example: "Terms"
-      role:
-        type: "string"
-        example: "Candidate"
-    PutRequestExample1:
-     type: "object"
-     required:
-     - "username"
-     - "email"
-     properties:
-      email:
-        type: "string"
-        example: "example.p@gmail.com"
-      date_of_birth:
-        type: "string"
-        example: "2/1/1998"
-      date_of_Joining:
-        type: "string"
-        example: "1/7/2021"
-      payment_terms:
-        type: "string"
-        example: "Terms"
-    PutRequestExample2:
-     type: "object"
-     required:
-     - "username"
-     - "email"
-     properties:
-      username:
-        type: "string"
-        example: "Harshith"
       assigned_to:
         type: "string"
         example: "details"

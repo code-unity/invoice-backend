@@ -53,7 +53,7 @@ var candidateSchema = mongoose.Schema({
     },
     role: {
         type: String,
-        required: [true, "please enter Role"],
+        default:"Candidate",
     },
     isActive:{
         type: Boolean,
@@ -61,6 +61,5 @@ var candidateSchema = mongoose.Schema({
     },
    
 });
-
 
 module.exports = mongoose.model("Candidate", candidateSchema);

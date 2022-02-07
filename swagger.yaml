@@ -536,12 +536,12 @@ paths:
                    example: request successful 
                address:
                 type: "string"
-                example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                          Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                          9030656522
-                          admin@codeunity.co
-                          PAN: AAICC9010B
-                          GSTIN: 37AAICC9010B1Z1"
+                example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                Nagin street, Sehari, Guntur Dt, AP, 524560
+                8130657523
+                example@gmail.com
+                PAN: ADIBC9018B
+                GSTIN: 37AAIBB8121B1Z1"
                 
         "500":
           description: Failed request
@@ -611,28 +611,28 @@ paths:
                   example: "61efaca536255b2a0421b838"
                  bill_from:
                   type: "string"
-                  example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                   Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                           9030656522
-                         admin@codeunity.co
-                           PAN: AAICC9010B
-                         GSTIN: 37AAICC9010B1Z1"
+                  example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                  Nagin street, Sehari, Guntur Dt, AP, 524560
+                  8130657523
+                  example@gmail.com
+                  PAN: ADIBC9018B
+                  GSTIN: 37AAIBB8121B1Z1"
                  bill_to:
                   type: "string"
-                  example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                   Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                         9030656522
-                   admin@codeunity.co
-                   PAN: AAICC9010B
-                   GSTIN: 37AAICC9010B1Z1"
+                  example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                  Nagin street, Sehari, Guntur Dt, AP, 524560
+                  8130657523
+                  example@gmail.com
+                  PAN: ADIBC9018B
+                  GSTIN: 37AAIBB8121B1Z1"
                  ship_to:
                   type: "string"
-                  example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                    Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                  9030656522
-                   admin@codeunity.co
-                   PAN: AAICC9010B
-                   GSTIN: 37AAICC9010B1Z1"
+                  example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                  Nagin street, Sehari, Guntur Dt, AP, 524560
+                  8130657523
+                  example@gmail.com
+                  PAN: ADIBC9018B
+                  GSTIN: 37AAIBB8121B1Z1"
                  payment_terms:
                   type: "string"
                   example: "payment terms"
@@ -751,26 +751,28 @@ paths:
                      example: "61efaca536255b2a0421b838"
                     bill_from:
                      type: "string"
-                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                          Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                           9030656522
-                         admin@codeunity.co
-                           PAN: AAICC9010B
-                         GSTIN: 37AAICC9010B1Z1"
+                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                     Nagin street, Sehari, Guntur Dt, AP, 524560
+                     8130657523
+                     example@gmail.com
+                     PAN: ADIBC9018B
+                     GSTIN: 37AAIBB8121B1Z1"
                     bill_to:
                      type: "string"
-                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,  Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                         9030656522
-                           admin@codeunity.co
-                            PAN: AAICC9010B
-                              GSTIN: 37AAICC9010B1Z1"
+                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                     Nagin street, Sehari, Guntur Dt, AP, 524560
+                     8130657523
+                     example@gmail.com
+                     PAN: ADIBC9018B
+                     GSTIN: 37AAIBB8121B1Z1"
                     ship_to:
                      type: "string"
-                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                        Brahmin street, Nagari, Chittoor Dt, AP, 517590  9030656522
-                        admin@codeunity.co
-                           PAN: AAICC9010B
-                            GSTIN: 37AAICC9010B1Z1"
+                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                     Nagin street, Sehari, Guntur Dt, AP, 524560
+                     8130657523
+                     example@gmail.com
+                     PAN: ADIBC9018B
+                     GSTIN: 37AAIBB8121B1Z1"
                     payment_terms:
                      type: "string"
                      example: "payment terms"
@@ -906,26 +908,28 @@ paths:
                      example: "61efaca536255b2a0421b838"
                     bill_from:
                      type: "string"
-                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                          Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                           9030656522
-                         admin@codeunity.co
-                           PAN: AAICC9010B
-                         GSTIN: 37AAICC9010B1Z1"
+                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                     Nagin street, Sehari, Guntur Dt, AP, 524560
+                     8130657523
+                     example@gmail.com
+                     PAN: ADIBC9018B
+                     GSTIN: 37AAIBB8121B1Z1"
                     bill_to:
                      type: "string"
-                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,  Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                         9030656522
-                           admin@codeunity.co
-                            PAN: AAICC9010B
-                              GSTIN: 37AAICC9010B1Z1"
+                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                     Nagin street, Sehari, Guntur Dt, AP, 524560
+                     8130657523
+                     example@gmail.com
+                     PAN: ADIBC9018B
+                     GSTIN: 37AAIBB8121B1Z1"
                     ship_to:
                      type: "string"
-                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                        Brahmin street, Nagari, Chittoor Dt, AP, 517590  9030656522
-                        admin@codeunity.co
-                           PAN: AAICC9010B
-                            GSTIN: 37AAICC9010B1Z1"
+                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                     Nagin street, Sehari, Guntur Dt, AP, 524560
+                     8130657523
+                     example@gmail.com
+                     PAN: ADIBC9018B
+                     GSTIN: 37AAIBB8121B1Z1"
                     payment_terms:
                      type: "string"
                      example: "payment terms"
@@ -1128,20 +1132,20 @@ paths:
                      example: "Harshith"
                     billing_address:
                      type: "string"
-                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                         Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                         9030656522
-                          admin@codeunity.co
-                           PAN: AAICC9010B
-                           GSTIN: 37AAICC9010B1Z1"
+                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                     Nagin street, Sehari, Guntur Dt, AP, 524560
+                     8130657523
+                     example@gmail.com
+                     PAN: ADIBC9018B
+                     GSTIN: 37AAIBB8121B1Z1"
                     shipping_address:
                      type: "string"
-                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                      Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                           9030656522
-                         admin@codeunity.co
-                             PAN: AAICC9010B
-                             GSTIN: 37AAICC9010B1Z1"
+                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                     Nagin street, Sehari, Guntur Dt, AP, 524560
+                     8130657523
+                     example@gmail.com
+                     PAN: ADIBC9018B
+                     GSTIN: 37AAIBB8121B1Z1"
                     date_of_contract:
                      type: "string"
                      example: "1/7/2021"
@@ -1237,20 +1241,20 @@ paths:
                      example: "Harshith"
                     billing_address:
                      type: "string"
-                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                         Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                         9030656522
-                          admin@codeunity.co
-                           PAN: AAICC9010B
-                           GSTIN: 37AAICC9010B1Z1"
+                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                     Nagin street, Sehari, Guntur Dt, AP, 524560
+                     8130657523
+                     example@gmail.com
+                     PAN: ADIBC9018B
+                     GSTIN: 37AAIBB8121B1Z1"
                     shipping_address:
                      type: "string"
-                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                      Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                           9030656522
-                         admin@codeunity.co
-                             PAN: AAICC9010B
-                             GSTIN: 37AAICC9010B1Z1"
+                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                     Nagin street, Sehari, Guntur Dt, AP, 524560
+                     8130657523
+                     example@gmail.com
+                     PAN: ADIBC9018B
+                     GSTIN: 37AAIBB8121B1Z1"
                     date_of_contract:
                      type: "string"
                      example: "1/7/2021"
@@ -1354,20 +1358,20 @@ paths:
                   example: "Harshith"
                  billing_address:
                   type: "string"
-                  example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                         Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                         9030656522
-                          admin@codeunity.co
-                           PAN: AAICC9010B
-                           GSTIN: 37AAICC9010B1Z1"
+                  example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                  Nagin street, Sehari, Guntur Dt, AP, 524560
+                  8130657523
+                  example@gmail.com
+                  PAN: ADIBC9018B
+                  GSTIN: 37AAIBB8121B1Z1"
                  shipping_address:
                   type: "string"
-                  example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                      Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                           9030656522
-                         admin@codeunity.co
-                             PAN: AAICC9010B
-                             GSTIN: 37AAICC9010B1Z1"
+                  example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                  Nagin street, Sehari, Guntur Dt, AP, 524560
+                  8130657523
+                  example@gmail.com
+                  PAN: ADIBC9018B
+                  GSTIN: 37AAIBB8121B1Z1"
                  date_of_contract:
                   type: "string"
                   example: "1/7/2021"
@@ -1481,20 +1485,20 @@ paths:
                      example: "Harshith"
                     billing_address:
                      type: "string"
-                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                         Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                         9030656522
-                          admin@codeunity.co
-                           PAN: AAICC9010B
-                           GSTIN: 37AAICC9010B1Z1"
+                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                     Nagin street, Sehari, Guntur Dt, AP, 524560
+                     8130657523
+                     example@gmail.com
+                     PAN: ADIBC9018B
+                     GSTIN: 37AAIBB8121B1Z1"
                     shipping_address:
                      type: "string"
-                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-                      Brahmin street, Nagari, Chittoor Dt, AP, 517590
-                           9030656522
-                         admin@codeunity.co
-                             PAN: AAICC9010B
-                             GSTIN: 37AAICC9010B1Z1"
+                     example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+                     Nagin street, Sehari, Guntur Dt, AP, 524560
+                     8130657523
+                     example@gmail.com
+                     PAN: ADIBC9018B
+                     GSTIN: 37AAIBB8121B1Z1"
                     date_of_contract:
                      type: "string"
                      example: "1/7/2021"
@@ -1670,12 +1674,12 @@ components:
         example: "9951207401"
       address:
         type: "string"
-        example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-        Brahmin street, Nagari, Chittoor Dt, AP, 517590
-        9030656522
-        admin@codeunity.co
-        PAN: AAICC9010B
-        GSTIN: 37AAICC9010B1Z1"
+        example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+        Nagin street, Sehari, Guntur Dt, AP, 524560
+        8130657523
+        example@gmail.com
+        PAN: ADIBC9018B
+        GSTIN: 37AAIBB8121B1Z1"
     Client:
      type: "object"
      required:
@@ -1689,20 +1693,20 @@ components:
         example: "Harshith"
       billing_address:
         type: "string"
-        example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-        Brahmin street, Nagari, Chittoor Dt, AP, 517590
-        9030656522
-        admin@codeunity.co
-        PAN: AAICC9010B
-        GSTIN: 37AAICC9010B1Z1"
+        example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+        Nagin street, Sehari, Guntur Dt, AP, 524560
+        8130657523
+        example@gmail.com
+        PAN: ADIBC9018B
+        GSTIN: 37AAIBB8121B1Z1"
       shipping_address:
         type: "string"
-        example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-        Brahmin street, Nagari, Chittoor Dt, AP, 517590
-        9030656522
-        admin@codeunity.co
-        PAN: AAICC9010B
-        GSTIN: 37AAICC9010B1Z1"
+        example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+        Nagin street, Sehari, Guntur Dt, AP, 524560
+        8130657523
+        example@gmail.com
+        PAN: ADIBC9018B
+        GSTIN: 37AAIBB8121B1Z1"
       date_of_contract:
         type: "string"
         example: "1/7/2021"
@@ -1739,28 +1743,28 @@ components:
         example: "61efaca536255b2a0421b838"
       bill_from:
         type: "string"
-        example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-        Brahmin street, Nagari, Chittoor Dt, AP, 517590
-        9030656522
-        admin@codeunity.co
-        PAN: AAICC9010B
-        GSTIN: 37AAICC9010B1Z1"
+        example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+        Nagin street, Sehari, Guntur Dt, AP, 524560
+        8130657523
+        example@gmail.com
+        PAN: ADIBC9018B
+        GSTIN: 37AAIBB8121B1Z1"
       bill_to:
         type: "string"
-        example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-        Brahmin street, Nagari, Chittoor Dt, AP, 517590
-        9030656522
-        admin@codeunity.co
-        PAN: AAICC9010B
-        GSTIN: 37AAICC9010B1Z1"
+        example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+        Nagin street, Sehari, Guntur Dt, AP, 524560
+        8130657523
+        example@gmail.com
+        PAN: ADIBC9018B
+        GSTIN: 37AAIBB8121B1Z1"
       ship_to:
         type: "string"
-        example: "CODEUNITY TECHNOLOGIES PVT LTD 1/32,
-        Brahmin street, Nagari, Chittoor Dt, AP, 517590
-        9030656522
-        admin@codeunity.co
-        PAN: AAICC9010B
-        GSTIN: 37AAICC9010B1Z1"
+        example: "CODEUNITY TECHNOLOGIES PVT LTD 1/42,
+        Nagin street, Sehari, Guntur Dt, AP, 524560
+        8130657523
+        example@gmail.com
+        PAN: ADIBC9018B
+        GSTIN: 37AAIBB8121B1Z1"
       payment_terms:
         type: "string"
         example: "payment terms"

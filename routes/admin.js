@@ -15,12 +15,9 @@ var config = require("../config/config.json");
 const auth = require('../check_authorization/admin_authorization');
 
 
-
-
 //Importing Constants :
 var constants_function = require("../constants/constants");
 var constants = constants_function("admin");
-
 
 
 //Crud Operations :
@@ -29,7 +26,6 @@ var constants = constants_function("admin");
 //POST Request for SignIn :
 router.post("/", async (req, res) => {
     try {
-
         const { username, password } = req.body;
 
         //Finding Admin with username :
@@ -97,10 +93,10 @@ router.post("/", async (req, res) => {
         //Error Catching :
     } catch (err) {
         console.log(err);
-        res.status(400).json({
+        res.status(500).json({
             "status": {
                 "success": false,
-                "code": 400,
+                "code": 500,
                 "message": err.message
             }
         });
@@ -108,23 +104,22 @@ router.post("/", async (req, res) => {
 });
 router.get("/address", auth, async (req, res) => {
     try {
-        const admin = await Admin.find({ email: req.adminData.email });
-        return res.status(200).json({
-            "status": {
-                "success": true,
-                "code": 200,
-                "message": constants.SUCCESFUL
-            },
-            address: admin[0].address
-        });
-
+            const admin = await Admin.find({ email: req.adminData.email });
+            res.status(200).json({
+                "status": {
+                    "success": true,
+                    "code": 200,
+                    "message": constants.SUCCESFUL
+                },
+                address: admin[0].address
+            });
     }
     catch (err) {
         console.log(err);
-        res.status(400).json({
+        res.status(500).json({
             "status": {
                 "success": false,
-                "code": 400,
+                "code": 500,
                 "message": err.message
             }
         });

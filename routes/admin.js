@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 
-
 //Models Imported :
 var Admin = require("../models/admin");
 
@@ -13,6 +12,8 @@ var Admin = require("../models/admin");
 
 //Middleware's Imported :
 var config = require("../config/config.json");
+const auth = require('../check_authorization/admin_authorization');
+
 
 
 
@@ -26,14 +27,13 @@ var constants = constants_function("admin");
 
 
 //POST Request for SignIn :
-router.post("/", async(req, res)=>{
-
+router.post("/", async (req, res) => {
     try {
 
-        const {username, password} = req.body;
+        const { username, password } = req.body;
 
         //Finding Admin with username :
-        const admin = await Admin.find({username: username});
+        const admin = await Admin.find({ username: username });
 
         //Returning Error if Admin Not Found
         if (admin.length < 1) {
@@ -64,7 +64,7 @@ router.post("/", async(req, res)=>{
             if (result) {
                 const token = jwt.sign(
                     {
-                        email:admin[0].email,
+                        email: admin[0].email,
                         adminId: admin[0]._id
                     },
                     config.ADMIN_JWT_KEY,
@@ -94,8 +94,9 @@ router.post("/", async(req, res)=>{
             });
         });
 
-    //Error Catching :
+        //Error Catching :
     } catch (err) {
+        console.log(err);
         res.status(400).json({
             "status": {
                 "success": false,
@@ -103,10 +104,33 @@ router.post("/", async(req, res)=>{
                 "message": err.message
             }
         });
-        console.log(err);
     }
 });
-  
+router.get("/address", auth, async (req, res) => {
+    try {
+        const admin = await Admin.find({ email: req.adminData.email });
+        return res.status(200).json({
+            "status": {
+                "success": true,
+                "code": 200,
+                "message": constants.SUCCESFUL
+            },
+            address: admin[0].address
+        });
+
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({
+            "status": {
+                "success": false,
+                "code": 400,
+                "message": err.message
+            }
+        });
+    }
+})
+
 
 
 module.exports = router;

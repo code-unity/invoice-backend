@@ -158,7 +158,6 @@ router.get("/:candidate_id", async (req, res) => {
 router.delete("/:candidate_id", async (req, res) => {
     try {
         const id = req.params.candidate_id;
-        if (id) {
             const candidate = await Candidate.findByIdAndUpdate(id, { isActive: false });
 
             if (!candidate) {
@@ -178,7 +177,6 @@ router.delete("/:candidate_id", async (req, res) => {
                     }
                 });
             }
-        }
     } catch (err) {
         console.log(err);
         res.status(500).json({

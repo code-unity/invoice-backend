@@ -245,7 +245,7 @@ router.delete("/:client_id", async(req, res)=>{
         } else {
 
             //Deleting client :
-            await Client.deleteOne({_id: id});
+            await Client.findByIdAndUpdate(id, { isActive: false });
 
             //Response :
             res.status(200).json({

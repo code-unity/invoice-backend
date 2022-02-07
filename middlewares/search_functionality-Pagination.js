@@ -49,10 +49,10 @@ module.exports = function SearchFunctionality_Pagination (model, query, array) {
                     res.Results = results;
                     next();
                 } else {
-                    res.status(400).json({
+                    res.status(404).json({
                         "status": {
                             "success": false,
-                            "code": 400,
+                            "code": 404,
                             "message": "not found"
                         }
                     });
@@ -68,7 +68,7 @@ module.exports = function SearchFunctionality_Pagination (model, query, array) {
             res.status(500).json({
                 "status": {
                     "success": false,
-                    "code": 400,
+                    "code": 500,
                     "message": err.message
                 }
             });

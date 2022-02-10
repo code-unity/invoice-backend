@@ -112,7 +112,7 @@ router.get("/:client_id", async(req, res)=>{
 
         //Finding client by ID :
         const id = req.params.client_id;
-        const client = await Client.findById(id);
+        const client = await Client.findOne({_id:id,isActive:true});
 
         if (client ==  null) {
 
@@ -173,7 +173,7 @@ router.patch("/:client_id", Client_Validator(), async(req, res)=>{
 
         //Finding client by ID :
         const id = req.params.client_id;
-        const client = await Client.findById(id);
+        const client = await Client.findOne({_id:id,isActive:true});
 
         if (client ==  null) {
 

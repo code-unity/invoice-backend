@@ -153,7 +153,7 @@ router.get("/:invoice_id", async(req, res)=>{
 
         //Finding invoice by ID :
         const id = req.params.invoice_id;
-        const invoice = await Invoice.findById(id);
+        const invoice = await Invoice.findOne({_id:id,isActive:true});
 
         if (invoice ==  null) {
 

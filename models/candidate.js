@@ -10,10 +10,7 @@ var candidateSchema = mongoose.Schema({
     //Validation for candidate name :
     name: {
         type: String,
-        unique: [true, "name already exists"],
         required: [true, "please enter Name"],
-        min: [4, "user name should be minimum 4 characters"]
-
     },
     //Validation for Email :
     email: {

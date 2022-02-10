@@ -58,7 +58,7 @@ module.exports = function SearchFunctionality_Pagination (model, query, array) {
                     });
                 }
             } else {
-                results.results = await model.find().populate(array).limit(limit).skip(startIndex).exec();
+                results.results = await model.find({isActive:true}).populate(array).limit(limit).skip(startIndex).exec();
                 res.Results = results;
                 next();
             }

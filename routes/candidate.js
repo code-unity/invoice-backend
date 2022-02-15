@@ -90,7 +90,7 @@ router.put("/:candidate_id", Candidate_Validator(), async (req, res) => {
     }
     try {
         const id = req.params.candidate_id;
-            const candidate = await Candidate.findByIdAndUpdate(id, req.body);
+            let candidate = await Candidate.findOne({_id:id,isActive:true})
             if (!candidate) {
                 res.status(404).json({
                     "status": {
@@ -100,6 +100,7 @@ router.put("/:candidate_id", Candidate_Validator(), async (req, res) => {
                     }
                 });
             } else {
+            candidate = await Candidate.findByIdAndUpdate(id, req.body);
                 res.status(200).json({
                     "status": {
                         "success": true,
@@ -123,7 +124,7 @@ router.put("/:candidate_id", Candidate_Validator(), async (req, res) => {
 router.get("/:candidate_id", async (req, res) => {
     try {
         const id = req.params.candidate_id;
-        const candidate = await Candidate.findById(id);
+        const candidate = await Candidate.findOne({_id:id,isActive:true});
         if (!candidate) {
             res.status(404).json({
                 "status": {
@@ -158,7 +159,6 @@ router.get("/:candidate_id", async (req, res) => {
 router.delete("/:candidate_id", async (req, res) => {
     try {
         const id = req.params.candidate_id;
-        if (id) {
             const candidate = await Candidate.findByIdAndUpdate(id, { isActive: false });
 
             if (!candidate) {
@@ -178,7 +178,6 @@ router.delete("/:candidate_id", async (req, res) => {
                     }
                 });
             }
-        }
     } catch (err) {
         console.log(err);
         res.status(500).json({

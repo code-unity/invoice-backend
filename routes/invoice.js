@@ -153,7 +153,7 @@ router.get("/:invoice_id", async(req, res)=>{
 
         //Finding invoice by ID :
         const id = req.params.invoice_id;
-        const invoice = await Invoice.findById(id);
+        const invoice = await Invoice.findOne({_id:id,isActive:true});
 
         if (invoice ==  null) {
 
@@ -201,9 +201,7 @@ router.delete("/:invoice_id", async(req, res)=>{
         //Finding invoice :
         const id = req.params.invoice_id;
         const invoice = await Invoice.findById(id);
-
         if (invoice ==  null) {
-
             //Response if invoice not found :
             res.status(404).json({
                 "status": {
@@ -215,8 +213,7 @@ router.delete("/:invoice_id", async(req, res)=>{
         } else {
 
             //Deleting invoice :
-            await Invoice.deleteOne({_id: id});
-
+           await Invoice.findByIdAndUpdate(id, { isActive: false });
             //Response :
             res.status(200).json({
                 "status": {

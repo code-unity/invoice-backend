@@ -12,10 +12,8 @@ var mongoose = require("mongoose");
 var cors = require("cors");
 
 
-
 //Importing Config File :
 var config = require("./config/config.json");
-
 
 
 //MongoDb Connection :
@@ -35,6 +33,8 @@ var adminRouter = require("./routes/admin");
 var clientRouter = require("./routes/client");
 var invoiceRouter = require("./routes/invoice");
 var timeSheetRouter = require("./routes/timesheet");
+var candidateRouter = require("./routes/candidate");
+
 //Express Application :
 var app = express();
 
@@ -60,6 +60,8 @@ app.use("/admin", adminRouter);
 app.use("/client", clientRouter);
 app.use("/invoice", invoiceRouter);
 app.use("/timesheet",timeSheetRouter)
+app.use("/candidate", candidateRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

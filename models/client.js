@@ -25,7 +25,7 @@ var clientSchema = mongoose.Schema({
     //Validation for shipping address :
     shipping_address: {
         type: String,
-        required: [true, "please enter shipping address"]
+        required: false
     },
 
     //Validation for date of contract :

@@ -9,8 +9,11 @@ module.exports = function constants(model){
         //Request Un-Succesful (Status Code: 400) :
         UN_SUCCESSFUL: "request un-successful",
 
-        //Not found (Status Code: 400) :
+        //Not found (Status Code: 404) :
         MODEL_NOT_FOUND: model + " not found",
+
+        //Not found (Status Code: 404) :
+        MODELS_NOT_FOUND: "No "+ model +"s",
 
         //Post request (Status code: 201) :
         MODEL_CREATE: "request successful, " + model + " created succesfully",

@@ -63,6 +63,11 @@ var adminSchema = mongoose.Schema({
                 message: "please enter a valid indian phone number"
             }
         ]
+    },
+    //Validation for address :
+    address:{
+        type:String,
+        required:false,
     }
 });
 

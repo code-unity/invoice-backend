@@ -58,19 +58,17 @@ router.post("/", Invoice_Validator(), async(req, res)=>{
 
         //Respose for Validation Error :
         console.log(errors.array());
-        return res.status(422).json({
+        return res.status(400).json({
             "status": {
                 "success": false,
-                "code": 422,
+                "code": 400,
                 "message": errors.array()[0].msg
             }
         });
     }
 
     //Taking Input Body :
-    console.log(req.body)
     const {client, invoice_number, bill_from, bill_to, ship_to, payment_terms, date, due_date, items, sub_total, tax, discount, total, amount_paid, balance_due, notes, terms} = req.body;
-
     //invoice body : 
     const invoice_data = {
         _id: new mongoose.Types.ObjectId(),
@@ -160,10 +158,10 @@ router.get("/:invoice_id", async(req, res)=>{
         if (invoice ==  null) {
 
             //Response if invoice not found :
-            res.status(400).json({
+            res.status(404).json({
                 "status": {
                     "success": false,
-                    "code": 400,
+                    "code": 404,
                     "message": constants.MODEL_NOT_FOUND
                 }
             });
@@ -182,10 +180,10 @@ router.get("/:invoice_id", async(req, res)=>{
 
     //Error Catching :
     }catch(err){
-        res.status(400).json({
+        res.status(500).json({
             "status": {
                 "success": false,
-                "code": 400,
+                "code": 500,
                 "message": err.message
             }
         });
@@ -207,10 +205,10 @@ router.delete("/:invoice_id", async(req, res)=>{
         if (invoice ==  null) {
 
             //Response if invoice not found :
-            res.status(400).json({
+            res.status(404).json({
                 "status": {
                     "success": false,
-                    "code": 400,
+                    "code": 404,
                     "message": constants.MODEL_NOT_FOUND
                 }
             });
@@ -223,7 +221,7 @@ router.delete("/:invoice_id", async(req, res)=>{
             res.status(200).json({
                 "status": {
                     "success": true,
-                    "code": 200,
+                    "code": 204,
                     "message": constants.MODEL_DELETE
                 }
             });
@@ -231,10 +229,10 @@ router.delete("/:invoice_id", async(req, res)=>{
 
     //Error Catching :
     }catch(err){
-        res.status(400).json({
+        res.status(500).json({
             "status": {
                 "success": false,
-                "code": 400,
+                "code": 500,
                 "message": err.message
             }
         });

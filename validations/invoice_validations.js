@@ -7,7 +7,6 @@ const { check } = require("express-validator");
 module.exports = function client_validator() {
 
     return [
-
         //Validation for client name :
         check("client")
             .notEmpty().withMessage("Please enter client id").bail(),
@@ -19,10 +18,6 @@ module.exports = function client_validator() {
         //Validation for address :
         check("bill_to")
             .notEmpty().withMessage("Please enter bill to").bail(),
-
-        //Validation for shipping address :
-        check("ship_to")
-            .notEmpty().withMessage("Please enter ship to").bail(),
 
         //Validation for payment terms :
         check("payment_terms")
@@ -54,14 +49,6 @@ module.exports = function client_validator() {
         //Validation for sub total :
         check("sub_total")
             .notEmpty().withMessage("Please enter sub total").bail(),
-
-        //Validation for tax :
-        check("tax")
-            .notEmpty().withMessage("Please enter tax").bail(),
-
-        //Validation for discount :
-        check("discount")
-            .notEmpty().withMessage("Please enter discount").bail(),
 
         //Validation for amount paid :
         check("amount_paid")

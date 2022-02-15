@@ -16,10 +16,6 @@ module.exports = function client_validator() {
         check("billing_address")
             .notEmpty().withMessage("Please enter address").bail(),
 
-        //Validation for shipping address :
-        check("shipping_address")
-            .notEmpty().withMessage("Please enter shipping address").bail(),
-
         //Validation for date of contract :
         check("date_of_contract")
             .notEmpty().withMessage("Please enter date of contract").bail(),

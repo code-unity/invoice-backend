@@ -11,9 +11,17 @@
                 font-family: Helvetica;
                 font-size: 15px;
                 height: 100%;
-                
             }
-            h1,h2,h3,h4,h5,h6{
+            h6{
+                margin: 0;
+                padding: 0;
+                font-size: 15px;
+                font-weight: 100;
+            }
+            h6::first-line {
+             font-weight:600;
+           }
+            h1,h2,h3,h4,h5{
                 margin: 0;
                 padding: 0;
             }
@@ -53,7 +61,7 @@
                 padding-bottom: 10px
             }
             .col-2{
-                width: 65%;
+                width: 50%;
                 text-align: left;
             }
             .col-4{
@@ -74,7 +82,7 @@
                 width: 50%;
             }
             .col-6{
-                width: 35%;
+                width: 50%;
                 text-align: left;
             }
             .col{
@@ -87,6 +95,11 @@
                 margin-right: 15%;
                 text-align: left;
                 margin-top: 5px;
+            }
+            .col-8{
+                text-align: left;
+                margin-top: 5px;
+
             }
             .company-details{
                 float: right;
@@ -173,7 +186,7 @@
                 <div class="row">
                     <div class="col-6">
                         <img src="https://www.codeunity.in/images/logo/logo.png"/>
-                        <p class="text-black" >{{bill_from}}</p>
+                        <h6 class="text-black" >{{bill_from}}</h6>
                     </div>
                     <div class="col-2">
                         <div class="company-details">
@@ -186,17 +199,26 @@
     
             <div class="body-section">
                 <div class="row">
+                    {{#if ship_to}}
                     <div class="first">
-                    <div class="col-5">
-                        <p class="sub-heading" >Bill To:</p>
-                        <p class="bold"  >{{bill_to}}</p>
-                    </div>
+                        <div class="col-5">
+                            <p class="sub-heading" >Bill To:</p>
+                            <p class="bold" >{{bill_to}}</p>
+                        </div>
                     <div class="col-5">
                         <p class="sub-heading" >Ship To: </p>
                         <p class="bold" >{{ship_to}}</p>
                     </div>
                 </div>
-
+                {{/if}}
+                {{#unless ship_to}}
+                <div class="first">
+                    <div class="col-8">
+                        <p class="sub-heading" >Bill To:</p>
+                        <h6 class="bold" >{{bill_to}}</h6>
+                    </div>
+                </div>
+                {{/unless}}  
                     <div class="col-4">
                 
                     <div class="row1">
@@ -243,19 +265,22 @@
                     </tbody>
                 </table>
                     <div class="col-7">
-
                         <div class="row1">
                             <p class="sub-heading3">Sub Total:</p>
                             <p class="data">{{sub_total}}</p>
                         </div>
+                        {{#if tax}}
                         <div class="row1">
-                            <p class="sub-heading3">Tax:</p>
+                            <p class="sub-heading3">GST:</p>
                             <p class="data">{{tax}}</p>
                         </div> 
+                        {{/if}}
+                        {{#if discount}}
                         <div class="row1">
                             <p class="sub-heading3">Discount:</p>
                             <p class="data">{{discount}}</p>
                         </div>
+                        {{/if}}
                          <div class="row1">
                             <p class="sub-heading3">Total:</p>
                             <p class="data">{{total}}</p>

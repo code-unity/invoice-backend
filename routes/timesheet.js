@@ -37,16 +37,25 @@ router.post("/", async (req, res) => {
   }
 });
 router.get("/", async (req, res) => {
+  let queries = req.query
   try {
-    const timeSheet = await timesheet.find({})
-    res.status(200).json({
-      status: {
-        success: true,
-        code: 200,
-        message: constants.SUCCESSFUL,
-        data: timeSheet
-      },
-    });
+    if (queries.from_date && queries.to_date) {
+      const from_date = new Date(queries.from_date)
+      const to_date = new Date(queries.to_date)
+      from_date.setHours(0, 0, 0, 0)
+      to_date.setDate(to_date.getDate() + 1)
+      to_date.setHours(0, 0, 0, 0)
+      const timeSheet = await timesheet.find({})
+      const data = timeSheet.filter((data) => data.date > new Date(from_date).toISOString() && data.date < new Date(to_date).toISOString())
+      res.status(200).json({
+        status: {
+          success: true,
+          code: 200,
+          message: constants.SUCCESSFUL,
+          data: data
+        },
+      });
+    }
   } catch (err) {
     res.status(400).json({
       status: {
@@ -61,16 +70,15 @@ router.get("/", async (req, res) => {
 
 router.put("/", async (req, res) => {
   let requests = req.body;
-  console.log(requests)
   try {
     for (let i = 0; i < requests.length; i++) {
-  await timesheet.findByIdAndUpdate(requests[i]._id,{
-    _id: requests[i]._id,
-    description: requests[i].description,
-    no_of_hours: requests[i].no_of_hours,
-    attendance: requests[i].attendance,
-    date: requests[i].date,
-  });
+      await timesheet.findByIdAndUpdate(requests[i]._id, {
+        _id: requests[i]._id,
+        description: requests[i].description,
+        no_of_hours: requests[i].no_of_hours,
+        attendance: requests[i].attendance,
+        date: requests[i].date,
+      });
     }
     res.status(200).json({
       status: {

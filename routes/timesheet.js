@@ -45,7 +45,7 @@ router.get("/", async (req, res) => {
       from_date.setHours(0, 0, 0, 0)
       to_date.setDate(to_date.getDate() + 1)
       to_date.setHours(0, 0, 0, 0)
-      const timeSheet = await timesheet.find({})
+      const timeSheet = await timesheet.find({ isActive: true })
       const data = timeSheet.filter((data) => data.date > new Date(from_date).toISOString() && data.date < new Date(to_date).toISOString())
       res.status(200).json({
         status: {
@@ -96,6 +96,29 @@ router.put("/", async (req, res) => {
       },
     });
     console.log("error", err);
+  }
+});
+router.delete("/:timesheet_id", async (req, res) => {
+  try {
+    const id = req.params.timesheet_id;
+    await timesheet.findByIdAndUpdate(id, { isActive: false });
+
+    res.status(200).json({
+      "status": {
+        "success": true,
+        "code": 204,
+        "message": constants.MODEL_DELETE
+      }
+    });
+  } catch (err) {
+    res.status(500).json({
+      "status": {
+        "success": false,
+        "code": 500,
+        "message": err.message
+      }
+    });
+    console.log(err);
   }
 });
 module.exports = router;

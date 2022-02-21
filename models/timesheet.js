@@ -27,6 +27,10 @@ var timeSheetSchema = mongoose.Schema({
     type: String,
     required: [true, "Please Enter Date"],
   },
+  isActive: {
+    type: Boolean,
+    default: true
+  }
 });
 
 module.exports = mongoose.model("TimeSheet", timeSheetSchema);

@@ -30,7 +30,7 @@ var constants = constants_function("client");
 
 const query = ["client_name", "date_of_contract"];
 // GET Request :
-router.get("/",SF_Pag(Client, query), async(req, res)=>{
+router.get("/", SF_Pag(Client, query), async (req, res) => {
 
     //Response :
     res.status(200).json({
@@ -46,7 +46,7 @@ router.get("/",SF_Pag(Client, query), async(req, res)=>{
 
 
 //Post Request :
-router.post("/", Client_Validator(), async(req, res)=>{
+router.post("/", Client_Validator(), async (req, res) => {
 
     //Error Handling for Validations :
     const errors = validationResult(req);
@@ -63,9 +63,9 @@ router.post("/", Client_Validator(), async(req, res)=>{
         });
     }
 
-    try{
+    try {
 
-        const {client_name, billing_address, shipping_address, date_of_contract, payment_terms, notes, terms} = req.body;
+        const { client_name, billing_address, shipping_address, date_of_contract, payment_terms, notes, terms } = req.body;
 
         //Creating new client :
         const client = new Client({
@@ -90,8 +90,8 @@ router.post("/", Client_Validator(), async(req, res)=>{
             "data": new_client
         });
 
-    //Error Catching :
-    }catch(err){
+        //Error Catching :
+    } catch (err) {
         res.status(500).json({
             "status": {
                 "success": false,
@@ -106,15 +106,15 @@ router.post("/", Client_Validator(), async(req, res)=>{
 
 
 //GET Request for client ID :
-router.get("/:client_id", async(req, res)=>{
-    
-    try{
+router.get("/:client_id", async (req, res) => {
+
+    try {
 
         //Finding client by ID :
         const id = req.params.client_id;
-        const client = await Client.findOne({_id:id,isActive:true});
+        const client = await Client.findOne({ _id: id, isActive: true });
 
-        if (client ==  null) {
+        if (client == null) {
 
             //Response if client not found :
             res.status(404).json({
@@ -137,8 +137,8 @@ router.get("/:client_id", async(req, res)=>{
             });
         }
 
-    //Error Catching :
-    }catch(err){
+        //Error Catching :
+    } catch (err) {
         res.status(500).json({
             "status": {
                 "success": false,
@@ -153,7 +153,7 @@ router.get("/:client_id", async(req, res)=>{
 
 
 //PATCH Request for client ID :
-router.patch("/:client_id", Client_Validator(), async(req, res)=>{
+router.patch("/:client_id", Client_Validator(), async (req, res) => {
 
     //Error Handling for Validations :
     const errors = validationResult(req);
@@ -168,14 +168,14 @@ router.patch("/:client_id", Client_Validator(), async(req, res)=>{
             }
         });
     }
-    
-    try{
+
+    try {
 
         //Finding client by ID :
         const id = req.params.client_id;
-        const client = await Client.findOne({_id:id,isActive:true});
+        const client = await Client.findOne({ _id: id, isActive: true });
 
-        if (client ==  null) {
+        if (client == null) {
 
             //Response if client not found :
             res.status(404).json({
@@ -187,7 +187,7 @@ router.patch("/:client_id", Client_Validator(), async(req, res)=>{
             });
         } else {
 
-            const {client_name, billing_address, shipping_address, date_of_contract, payment_terms, notes, terms} = req.body;
+            const { client_name, billing_address, shipping_address, date_of_contract, payment_terms, notes, terms } = req.body;
 
             //Updating client :
             client.client_name = client_name;
@@ -210,8 +210,8 @@ router.patch("/:client_id", Client_Validator(), async(req, res)=>{
             });
         }
 
-    //Error Catching :
-    }catch(err){
+        //Error Catching :
+    } catch (err) {
         res.status(500).json({
             "status": {
                 "success": false,
@@ -224,15 +224,15 @@ router.patch("/:client_id", Client_Validator(), async(req, res)=>{
 });
 
 //DELETE Request for client ID :
-router.delete("/:client_id", async(req, res)=>{
-    
-    try{
+router.delete("/:client_id", async (req, res) => {
+
+    try {
 
         //Finding client :
         const id = req.params.client_id;
         const client = await Client.findById(id);
 
-        if (client ==  null) {
+        if (client == null) {
 
             //Response if client not found :
             res.status(404).json({
@@ -257,8 +257,8 @@ router.delete("/:client_id", async(req, res)=>{
             });
         }
 
-    //Error Catching :
-    }catch(err){
+        //Error Catching :
+    } catch (err) {
         res.status(500).json({
             "status": {
                 "success": false,

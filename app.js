@@ -22,7 +22,7 @@ mongoose.connect(config.MONGO_URL,{useNewUrlParser: true, useUnifiedTopology: tr
         console.log("mongodb connection error", err);
     }
     if(!err && conn){
-        console.log("mongodb connection stablished");
+        console.log("mongodb connection established");
     }
 });
 
@@ -34,6 +34,7 @@ var clientRouter = require("./routes/client");
 var invoiceRouter = require("./routes/invoice");
 var timeSheetRouter = require("./routes/timesheet");
 var candidateRouter = require("./routes/candidate");
+var scheduleRouter = require("./routes/schedule");
 
 //Express Application :
 var app = express();
@@ -61,6 +62,7 @@ app.use("/client", clientRouter);
 app.use("/invoice", invoiceRouter);
 app.use("/timesheet",timeSheetRouter)
 app.use("/candidate", candidateRouter);
+app.use("/schedule", scheduleRouter);
 
 
 // catch 404 and forward to error handler

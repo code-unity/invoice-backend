@@ -6,7 +6,6 @@ const { check } = require("express-validator");
 module.exports = function schedule_validator() {
 
     return [
-
         //Validation for client :
         check("client")
             .notEmpty().withMessage("Please enter client name").bail(),
@@ -18,9 +17,11 @@ module.exports = function schedule_validator() {
         //Validation for date :
         check("date")
             .notEmpty().withMessage("Please enter date").bail(),
-            //Validation for frequency :
+
+        //Validation for frequency :
         check("frequency")
-        .notEmpty().withMessage("Please enter frequency").bail(),
+            .notEmpty().withMessage("Please enter frequency").bail(),
+
         //Validation for time :
         check("time")
             .notEmpty().withMessage("Please enter time").bail(),

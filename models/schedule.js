@@ -38,9 +38,9 @@ var scheduleSchema = mongoose.Schema({
         type: String,
         required: [true, "please enter time"]
     },
-    isActive:{
+    isActive: {
         type: Boolean,
-        default:true
+        default: true
     }
 });
 

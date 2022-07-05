@@ -64,12 +64,12 @@ router.post("/", Schedule_Validator(), async (req, res) => {
 
     try {
 
-        const { is_active, client , invoiceNumber, date, frequency, time } = req.body;
+        const { is_active, client, invoiceNumber, date, frequency, time } = req.body;
 
         //Creating new schedule :
         const schedule = new Schedule({
             _id: new mongoose.Types.ObjectId(),
-            is_active, client , invoiceNumber, date, frequency, time
+            is_active, client, invoiceNumber, date, frequency, time
         });
         const new_schedule = await schedule.save();
 
@@ -180,7 +180,7 @@ router.patch("/:schedule_id", Schedule_Validator(), async (req, res) => {
             });
         } else {
 
-            const { is_active, client , invoiceNumber, date, frequency, time } = req.body;
+            const { is_active, client, invoiceNumber, date, frequency, time } = req.body;
 
             //Updating schedule :
             schedule.is_active = is_active;

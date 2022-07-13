@@ -7,80 +7,87 @@ var pdf = require('html-pdf');
 const utils = require('util');
 const puppeteer = require('puppeteer')
 const readFile = utils.promisify(fs.readFile)
+const { validationResult } = require("express-validator");
 
-//Function for Invoice Pdf's Generation 
-const invoicePdfsGeneration = (invoiceData, month, year) => {
+
+//Validations Imported :
+var invoiceFilterValidator = require("../validations/invoiceFilter_validations");
+
+
+//function for reading  the html file
+async function getTemplateHtml() {
 
     //Template Path :
     var template_path = __dirname.replace("routes", "templates") + "/" + "invoice.html";
-
-    //reading the html file
-    async function getTemplateHtml() {
-        try {
-            return await readFile(template_path, 'utf8');
-        } catch (err) {
-            return Promise.reject("Could not load html template");
-        }
-    }
-
-    for (var i = 0; i < invoiceData.length; i++) {
-
-        async function generatePdf() {
-
-            // Taking input body  
-            const { _id, client, invoice_number, bill_from, bill_to, ship_to, payment_terms, date, due_date, items, sub_total, tax, discount, total, amount_paid, balance_due, notes, terms } = invoiceData[i];
-
-            // invoice body: 
-            const invoice_data = {
-                _id,
-                client,
-                invoice_number,
-                bill_from,
-                bill_to,
-                ship_to,
-                payment_terms,
-                date,
-                due_date,
-                items,
-                sub_total,
-                tax,
-                discount,
-                total,
-                amount_paid,
-                balance_due,
-                notes,
-                terms
-            };
-            getTemplateHtml().then(async (res) => {
-                // Now we have the html code of our template in res object
-                // we have compile our code with handlebars
-                const template = handlebars.compile(res, { strict: true });
-                // We can use this to add dyamic data to our handlebas template at run time from database or API as per need. 
-                const result = template(invoice_data);
-
-                const html = result;
-                // we are using headless mode
-                const browser = await puppeteer.launch();
-                const page = await browser.newPage()
-                // We set the page content as the generated html by handlebars
-                await page.setContent(html)
-                // We use pdf function to generate the pdf in the desired folder
-                const pdfpath = __dirname.replace("routes", "Invoices") + "/" + `${invoice_number}-${month}-${year}.pdf`;
-
-                //format of our pdf is A4
-                await page.pdf({ path: pdfpath, format: 'A4', printBackground: true, })
-                await browser.close();
-                console.log("PDF Generated")
-            }).catch(err => {
-                console.error(err)
-            });
-        }
-        generatePdf();
+    try {
+        return await readFile(template_path, 'utf8');
+    } catch (err) {
+        return Promise.reject("Could not load html template");
     }
 }
 
+//Function for Invoice Pdf's Generation 
+async function generatePdf(invoiceData, month, year, i) {
+
+    // Taking input body  
+    const { _id, client, invoice_number, bill_from, bill_to, ship_to, payment_terms, date, due_date, items, sub_total, tax, discount, total, amount_paid, balance_due, notes, terms } = invoiceData[i];
+
+    // invoice body: 
+    const invoice_data = {
+        _id,
+        client,
+        invoice_number,
+        bill_from,
+        bill_to,
+        ship_to,
+        payment_terms,
+        date,
+        due_date,
+        items,
+        sub_total,
+        tax,
+        discount,
+        total,
+        amount_paid,
+        balance_due,
+        notes,
+        terms
+    };
+    getTemplateHtml().then(async (res) => {
+        // Now we have the html code of our template in res object
+        // we have compile our code with handlebars
+        const template = handlebars.compile(res, { strict: true });
+        // We can use this to add dyamic data to our handlebas template at run time from database or API as per need. 
+        const result = template(invoice_data);
+
+        const html = result;
+        // we are using headless mode
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage()
+        // We set the page content as the generated html by handlebars
+        await page.setContent(html)
+        // We use pdf function to generate the pdf in the desired folder
+        const pdfpath = __dirname.replace("routes", "Invoices") + "/" + `${invoice_number}-${month}-${year}.pdf`;
+
+        //format of our pdf is A4
+        await page.pdf({ path: pdfpath, format: 'A4', printBackground: true, })
+        await browser.close();
+        console.log("PDF Generated")
+    }).catch(err => {
+        console.error(err)
+    });
+}
+
+//for loop for pdf Generation
+const invoicePdfsGeneration = (invoiceData, month, year) => {
+
+    for (var i = 0; i < invoiceData.length; i++)
+        generatePdf(invoiceData, month, year, i);
+
+}
+
 //function for sending the Generated invoices pdf via provided mail  
-const sendingInvoicesViaMail = (invoiceData, month, year, toEmail) => {
+const sendingInvoicesViaMail = (invoiceData, month, year, toEmails, ccEmails) => {
     const invoices = []
     for (var i = 0; i < invoiceData.length; i++) {
         invoices.push({
@@ -99,7 +106,8 @@ const sendingInvoicesViaMail = (invoiceData, month, year, toEmail) => {
 
     var mailOptions = {
         from: 'CodeUnity Technologies private Limited',
-        to: toEmail,
+        to: toEmails,
+        cc: ccEmails,
         subject: `Codeunity Technologies GST Invoices Report for ${month} / ${year}`,
         text: `Hello Auditor, Please find the attached invoices for the ${month} / ${year} below`,
         attachments: invoices,
@@ -127,14 +135,29 @@ const deleteGenereatedPdfs = (invoiceData, month, year) => {
     }
 }
 
-router.post("/", async (req, res) => {
+router.post("/", invoiceFilterValidator(), async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+
+        //Respose for Validation Error :
+        console.log(errors.array());
+        return res.status(400).json({
+            "status": {
+                "success": false,
+                "code": 400,
+                "message": errors.array()[0].msg
+            }
+        });
+    }
+
     const info = req.body;
 
     //calling the pdf's generation function
     invoicePdfsGeneration(info.invoiceData, info.month, info.year);
 
     //calling the mail sending function
-    sendingInvoicesViaMail(info.invoiceData, info.month, info.year, info.toEmail);
+    sendingInvoicesViaMail(info.invoiceData, info.month, info.year, info.toEmails, info.ccEmails);
 
     // deleteGenereatedPdfs(info.invoiceData, info.month, info.year);
 }

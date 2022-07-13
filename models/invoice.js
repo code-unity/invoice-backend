@@ -54,7 +54,18 @@ var invoiceSchema = mongoose.Schema({
         type: String,
         required: [true, "Please Enter Date"]
     },
-
+    //Validation for month
+    month:
+    {
+        type: String,
+        required: false,
+    },
+    //Validation for year
+    year:
+    {
+        type: String,
+        required: false,
+    },
     //Validation for due date :
     due_date: {
         type: String,
@@ -102,7 +113,7 @@ var invoiceSchema = mongoose.Schema({
     //Validation for tax :
     tax: {
         type: String,
-        required:false
+        required: false
     },
 
     //Validation for total :
@@ -140,10 +151,11 @@ var invoiceSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    isActive:{
+    isActive: {
         type: Boolean,
-        default:true
+        default: true
     },
+
 });
 
 

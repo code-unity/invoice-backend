@@ -22,7 +22,7 @@ mongoose.connect(config.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: 
         console.log("mongodb connection error", err);
     }
     if (!err && conn) {
-        console.log("mongodb connection stablished");
+        console.log("mongodb connection established");
     }
 });
 

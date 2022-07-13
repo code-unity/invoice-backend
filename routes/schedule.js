@@ -35,7 +35,7 @@ router.post("/", Schedule_Validator(), async (req, res) => {
     }
     try {
         const { isDisabled, clientId, invoiceNumber, date, frequency, time } = req.body;
-        const scheduleName = getScheduleName(clientId);
+        const scheduleName = await getScheduleName(clientId);
         const schedule = new Schedule({
             _id: new mongoose.Types.ObjectId(),
             isDisabled, clientId, scheduleName, invoiceNumber, date, frequency, time
@@ -103,8 +103,8 @@ const getScheduleName = async (clientId) => {
     try {
         let scheduleName = "";
         const schedule = await Schedule.find({ clientId });
-        const client = await Client.findOne({ clientId });
-        if (schedule && schedule.length) {
+        const client = await Client.findOne( {_id : clientId });
+        if (schedule && schedule.length ) {
             scheduleName = `${client.client_name}--CU--${schedule.length + 1}`;
             return scheduleName;
         }
@@ -138,10 +138,9 @@ router.patch("/:schedule_id", Schedule_Validator(), async (req, res) => {
                 }
             });
         } else {
-            const { isDisabled, clientId, scheduleName, invoiceNumber, date, frequency, time } = req.body;
+            const { isDisabled, clientId, invoiceNumber, date, frequency, time } = req.body;
             schedule.isDisabled = isDisabled;
             schedule.clientId = clientId;
-            schedule.scheduleName = scheduleName;
             schedule.invoiceNumber = invoiceNumber;
             schedule.date = date;
             schedule.frequency = frequency;

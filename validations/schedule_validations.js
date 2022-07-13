@@ -5,9 +5,6 @@ module.exports = function schedule_validator() {
         check("isDisabled")
             .notEmpty().withMessage("Please enter disabled status").bail(),
 
-        check("scheduleName")
-            .notEmpty().withMessage("Please enter schedule name").bail(),
-
         check("clientId")
             .notEmpty().withMessage("Please enter client").bail(),
 

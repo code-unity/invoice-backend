@@ -60,7 +60,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/admin", adminRouter);
 app.use("/client", clientRouter);
 app.use("/invoice", invoiceRouter);
-app.use("/timesheet",timeSheetRouter)
+app.use("/timesheet",timeSheetRouter);
 app.use("/candidate", candidateRouter);
 app.use("/schedule", scheduleRouter);
 

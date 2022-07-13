@@ -17,11 +17,11 @@ var config = require("./config/config.json");
 
 
 //MongoDb Connection :
-mongoose.connect(config.MONGO_URL,{useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true},function(err, conn){
-    if(err){
+mongoose.connect(config.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }, function (err, conn) {
+    if (err) {
         console.log("mongodb connection error", err);
     }
-    if(!err && conn){
+    if (!err && conn) {
         console.log("mongodb connection stablished");
     }
 });
@@ -34,6 +34,8 @@ var clientRouter = require("./routes/client");
 var invoiceRouter = require("./routes/invoice");
 var timeSheetRouter = require("./routes/timesheet");
 var candidateRouter = require("./routes/candidate");
+
+var invoiceFilterRouter = require("./routes/invoiceFilter");
 var payslipRouter = require("./routes/payslip");
 
 //Express Application :
@@ -60,20 +62,20 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/admin", adminRouter);
 app.use("/client", clientRouter);
 app.use("/invoice", invoiceRouter);
-app.use("/timesheet",timeSheetRouter)
+app.use("/timesheet", timeSheetRouter)
 app.use("/candidate", candidateRouter);
+app.use("/invoiceFilter", invoiceFilterRouter);
 app.use("/payslip",payslipRouter)
 
-
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     next(createError(404));
 });
 
 
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get("env") === "development" ? err : {};
@@ -85,4 +87,4 @@ app.use(function(err, req, res, next) {
 
 
 
-module.exports = app;
+module.exports = app; 

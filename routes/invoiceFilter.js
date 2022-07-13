@@ -27,10 +27,10 @@ async function getTemplateHtml() {
 }
 
 //Function for Invoice Pdf's Generation 
-async function generatePdf(invoiceData, month, year, i) {
+async function generatePdf(invoiceData, month, year) {
 
     // Taking input body  
-    const { _id, client, invoice_number, bill_from, bill_to, ship_to, payment_terms, date, due_date, items, sub_total, tax, discount, total, amount_paid, balance_due, notes, terms } = invoiceData[i];
+    const { _id, client, invoice_number, bill_from, bill_to, ship_to, payment_terms, date, due_date, items, sub_total, tax, discount, total, amount_paid, balance_due, notes, terms } = invoiceData;
 
     // invoice body: 
     const invoice_data = {
@@ -53,13 +53,13 @@ async function generatePdf(invoiceData, month, year, i) {
         notes,
         terms
     };
-    getTemplateHtml().then(async (res) => {
+    try {
+        let res = await getTemplateHtml()
         // Now we have the html code of our template in res object
         // we have compile our code with handlebars
         const template = handlebars.compile(res, { strict: true });
         // We can use this to add dyamic data to our handlebas template at run time from database or API as per need. 
         const result = template(invoice_data);
-
         const html = result;
         // we are using headless mode
         const browser = await puppeteer.launch();
@@ -73,21 +73,21 @@ async function generatePdf(invoiceData, month, year, i) {
         await page.pdf({ path: pdfpath, format: 'A4', printBackground: true, })
         await browser.close();
         console.log("PDF Generated")
-    }).catch(err => {
+    } catch (err) {
         console.error(err)
-    });
+    }
 }
 
 //for loop for pdf Generation
-const invoicePdfsGeneration = (invoiceData, month, year) => {
+const invoicePdfsGeneration = async (invoiceData, month, year) => {
 
     for (var i = 0; i < invoiceData.length; i++)
-        generatePdf(invoiceData, month, year, i);
+        await generatePdf(invoiceData[i], month, year);
 
 }
 
 //function for sending the Generated invoices pdf via provided mail  
-const sendingInvoicesViaMail = (invoiceData, month, year, toEmails, ccEmails) => {
+const sendingInvoicesViaMail = async (invoiceData, month, year, toEmails, ccEmails) => {
     const invoices = []
     for (var i = 0; i < invoiceData.length; i++) {
         invoices.push({
@@ -95,7 +95,7 @@ const sendingInvoicesViaMail = (invoiceData, month, year, toEmails, ccEmails) =>
             path: __dirname.replace("routes", "Invoices") + "/" + `${invoiceData[i].invoice_number}-${month}-${year}.pdf`,
         })
     }
-    var transporter = nodemailer.createTransport({
+    var transporter = await nodemailer.createTransport({
         service: 'gmail',
         host: 'smtp.gmail.com',
         auth: {
@@ -114,7 +114,7 @@ const sendingInvoicesViaMail = (invoiceData, month, year, toEmails, ccEmails) =>
     };
 
     try {
-        transporter.sendMail(mailOptions);
+        await transporter.sendMail(mailOptions);
         console.log('Email Sent Successfullly')
     }
     catch (error) {
@@ -124,9 +124,9 @@ const sendingInvoicesViaMail = (invoiceData, month, year, toEmails, ccEmails) =>
 }
 
 //Function to delete the generated PDF's
-const deleteGenereatedPdfs = (invoiceData, month, year) => {
+const deleteGenereatedPdfs = async (invoiceData, month, year) => {
     for (var i = 0; i < invoiceData.length; i++) {
-        fs.unlink(__dirname.replace("routes", "Invoices") + "/" + `${invoiceData[i].invoice_number}-${month}-${year}.pdf`, function (err) {
+        await fs.unlink(__dirname.replace("routes", "Invoices") + "/" + `${invoiceData[i].invoice_number}-${month}-${year}.pdf`, function (err) {
             if (err)
                 console.log('Files Deletion Unsuccessful')
             else
@@ -154,12 +154,12 @@ router.post("/", invoiceFilterValidator(), async (req, res) => {
     const info = req.body;
 
     //calling the pdf's generation function
-    invoicePdfsGeneration(info.invoiceData, info.month, info.year);
+    await invoicePdfsGeneration(info.invoiceData, info.month, info.year);
 
     //calling the mail sending function
-    sendingInvoicesViaMail(info.invoiceData, info.month, info.year, info.toEmails, info.ccEmails);
+    await sendingInvoicesViaMail(info.invoiceData, info.month, info.year, info.toEmails, info.ccEmails);
 
-    // deleteGenereatedPdfs(info.invoiceData, info.month, info.year);
+    await deleteGenereatedPdfs(info.invoiceData, info.month, info.year);
 }
 )
 

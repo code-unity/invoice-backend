@@ -3,7 +3,8 @@ var router = express.Router();
 var mongoose = require("mongoose");
 const { validationResult } = require("express-validator");
 var Schedule = require("../models/schedule");
-var SF_Pag = require("../middlewares/search_functionality-Pagination");       
+var Client = require("../models/client");
+var SF_Pag = require("../middlewares/search_functionality-Pagination");
 var Schedule_Validator = require("../validations/schedule_validations");
 var constants_function = require("../constants/constants");
 var constants = constants_function("schedule");
@@ -33,10 +34,11 @@ router.post("/", Schedule_Validator(), async (req, res) => {
         });
     }
     try {
-        const { isDisabled, clientId, scheduleName, invoiceNumber, date, frequency, time } = req.body;
+        const { isDisabled, clientId, invoiceNumber, date, frequency, time } = req.body;
+        const scheduleName = getScheduleName(clientId);
         const schedule = new Schedule({
             _id: new mongoose.Types.ObjectId(),
-            isDisabled, clientId,scheduleName, invoiceNumber, date, frequency, time
+            isDisabled, clientId, scheduleName, invoiceNumber, date, frequency, time
         });
         const new_schedule = await schedule.save();
         res.status(200).json({
@@ -47,7 +49,7 @@ router.post("/", Schedule_Validator(), async (req, res) => {
             },
             "data": new_schedule
         });
-    } 
+    }
     catch (err) {
         res.status(500).json({
             "status": {
@@ -64,7 +66,7 @@ router.get("/:schedule_id", async (req, res) => {
     try {
         const id = req.params.schedule_id;
         const schedule = await Schedule.findOne({ _id: id, isActive: true });
-        if (!schedule ) {
+        if (!schedule) {
             res.status(404).json({
                 "status": {
                     "success": false,
@@ -72,7 +74,7 @@ router.get("/:schedule_id", async (req, res) => {
                     "message": constants.MODEL_NOT_FOUND
                 }
             });
-        } 
+        }
         else {
             res.status(200).json({
                 "status": {
@@ -83,7 +85,7 @@ router.get("/:schedule_id", async (req, res) => {
                 "data": schedule
             });
         }
-    } 
+    }
     catch (err) {
         res.status(500).json({
             "status": {
@@ -96,41 +98,22 @@ router.get("/:schedule_id", async (req, res) => {
     }
 });
 
-router.get("/getCountByClientId/:clientId", async (req, res) => {
+
+const getScheduleName = async (clientId) => {
     try {
-        const id = req.params.clientId;
-        const schedule = await Schedule.find({ clientId : id });
-        if (!schedule ) {
-            res.status(404).json({
-                "status": {
-                    "success": false,
-                    "code": 404,
-                    "message": constants.MODEL_NOT_FOUND
-                }
-            });
-        } 
-        else {
-            res.status(200).json({
-                "status": {
-                    "success": true,
-                    "code": 200,
-                    "message": constants.SUCCESSFUL
-                },
-                "data": schedule.length
-            });
+        let scheduleName = "";
+        const schedule = await Schedule.find({ clientId });
+        const client = await Client.findOne({ clientId });
+        if (schedule && schedule.length) {
+            scheduleName = `${client.client_name}--CU--${schedule.length + 1}`;
+            return scheduleName;
         }
-    } 
-    catch (err) {
-        res.status(500).json({
-            "status": {
-                "success": false,
-                "code": 500,
-                "message": err.message
-            }
-        });
-        console.log(err);
+        return `${client.client_name}--CU--01`;
     }
-});
+    catch (err) {
+        throw "unable to get the client info";
+    }
+};
 
 router.patch("/:schedule_id", Schedule_Validator(), async (req, res) => {
     const errors = validationResult(req);
@@ -146,7 +129,7 @@ router.patch("/:schedule_id", Schedule_Validator(), async (req, res) => {
     try {
         const id = req.params.schedule_id;
         var schedule = await Schedule.findOne({ _id: id, isActive: true });
-        if (!schedule ) {
+        if (!schedule) {
             res.status(404).json({
                 "status": {
                     "success": false,
@@ -173,7 +156,7 @@ router.patch("/:schedule_id", Schedule_Validator(), async (req, res) => {
                 "data": new_schedule
             });
         }
-    } 
+    }
     catch (err) {
         res.status(500).json({
             "status": {
@@ -190,7 +173,7 @@ router.delete("/:schedule_id", async (req, res) => {
     try {
         const id = req.params.schedule_id;
         const schedule = await Schedule.findById(id);
-        if (!schedule ) {
+        if (!schedule) {
             res.status(404).json({
                 "status": {
                     "success": false,
@@ -198,7 +181,7 @@ router.delete("/:schedule_id", async (req, res) => {
                     "message": constants.MODEL_NOT_FOUND
                 }
             });
-        } 
+        }
         else {
             await Schedule.findByIdAndUpdate(id, { isActive: false });
             res.status(200).json({
@@ -209,7 +192,7 @@ router.delete("/:schedule_id", async (req, res) => {
                 }
             });
         }
-    } 
+    }
     catch (err) {
         res.status(500).json({
             "status": {

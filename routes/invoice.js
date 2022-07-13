@@ -260,17 +260,34 @@ router.delete("/:invoice_id", async (req, res) => {
                 }
             });
         } else {
-
+             
             //Deleting invoice :
-            await Invoice.findByIdAndUpdate(id, { isActive: false });
+
+            await Invoice.findByIdAndDelete(id,function(err,docs){
+            if(err){
+                console.log(err);
+            }
+            else{
+            
+                //Response :
+                res.status(200).json({
+                    "status": {
+                    "success": true,
+                    "code": 204,
+                    "message": constants.MODEL_DELETE
+                }
+            })
+            
+            }
+           })
             //Response :
-            res.status(200).json({
+            /*res.status(200).json({
                 "status": {
                     "success": true,
                     "code": 204,
                     "message": constants.MODEL_DELETE
                 }
-            });
+            });*/
         }
 
         //Error Catching :

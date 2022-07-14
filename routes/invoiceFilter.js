@@ -79,8 +79,8 @@ async function generatePdf(invoiceData, month, year) {
         await page.pdf({ path: pdfpath, format: 'A4', printBackground: true, })
         await browser.close();
         console.log("PDF Generated")
-    } catch (err) {
-        console.error(err)
+    } catch (error) {
+        return error;
     }
 }
 
@@ -124,8 +124,7 @@ const sendingInvoicesViaMail = async (invoiceData, month, year, toEmails, ccEmai
         console.log('Email Sent Successfullly')
     }
     catch (error) {
-        console.log('Email not sent')
-        console.log(error);
+        return error;
     }
 }
 
@@ -161,22 +160,48 @@ router.post("/", invoiceFilterValidator(), async (req, res) => {
     const info = req.body;
 
     //calling the pdf's generation function
-    await invoicePdfsGeneration(info.invoiceData, info.month, info.year);
+    const pdfError = await invoicePdfsGeneration(info.invoiceData, info.month, info.year);
+
+    //response, when pdf generation failed
+    if (pdfError) {
+        console.log(pdfError);
+        return res.status(400).json({
+            "status": {
+                "success": false,
+                "code": 400,
+                "message": "pdf generation Failed"
+            }
+        });
+    }
 
     //calling the mail sending function
-    await sendingInvoicesViaMail(info.invoiceData, info.month, info.year, info.toEmails, info.ccEmails);
+    const emailError = await sendingInvoicesViaMail(info.invoiceData, info.month, info.year, info.toEmails, info.ccEmails);
 
+    //Delete the pdf files generated
     await deleteGenereatedPdfs(info.invoiceData, info.month, info.year);
 
-    //response for successful execution
+    //response, when the email sending unsuccessful due to poor connectivity or any other problems
+    if (emailError) {
+        console.log(emailError);
+        return res.status(400).json({
+            "status": {
+                "success": false,
+                "code": 400,
+                "message": "Invoices sending Failed, might be due to poor internet"
+            }
+        });
+    }
+
+    //response for successful email sent
     return res.status(200).json({
         "status": {
             "success": true,
             "code": 200,
+            "message": "Invoices sent successfully",
         }
     });
 }
-) 
+)
 
 // GET Request for obtaining filteredData by month and year 
 router.get("/:newmonth/:newyear", async (req, res) => {
@@ -184,32 +209,30 @@ router.get("/:newmonth/:newyear", async (req, res) => {
         const mnth = req.params.newmonth;
         const yr = req.params.newyear;
         const filteredData = await Invoice.find({ month: mnth, year: yr, isActive: true });
-
-        if (filteredData == null) {
-
-            //Response if invoice not found :
-            res.status(404).json({
-                "status": {
-                    "success": false,
-                    "code": 404,
-                    "message": constants.MODEL_NOT_FOUND
-                }
-            });
-        } else {
-
-            //Response :
+        console.log(filteredData);
+        if (filteredData.length == 0) {
             res.status(200).json({
                 "status": {
                     "success": true,
                     "code": 200,
-                    "message": constants.SUCCESSFUL
+                    "message": `There are no invoices in ${mnth} ${yr}`
+                },
+                "data": filteredData
+            });
+        }
+        else {
+            res.status(200).json({
+                "status": {
+                    "success": true,
+                    "code": 200,
+                    "message": "Invoices Fetched Successfully"
                 },
                 "data": filteredData
             });
         }
 
-        //Error Catching :
-    } catch (err) {
+    }
+    catch (err) {
         res.status(500).json({
             "status": {
                 "success": false,

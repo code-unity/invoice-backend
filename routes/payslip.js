@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 
-
 //Dependencies Imported :
 var express = require("express");
 var router = express.Router();
@@ -11,6 +10,7 @@ var fs = require("fs");
 var puppeteer = require("puppeteer");
 var handlebars = require("handlebars");
 const { validationResult } = require("express-validator");
+
 
 
 //Middleware's Imported :
@@ -27,6 +27,7 @@ var Payslip_Validator = require("../validations/payslip_validations");
 
 //Importing Constants :
 var constants_function = require("../constants/constants");
+const payslip = require("../models/payslip");
 var constants = constants_function("payslip");
 
 
@@ -46,6 +47,7 @@ router.get("/",SF_Pag(Payslip), async(req, res)=>{
         "data": res.Results
     });
 });
+
 
 
 
@@ -71,6 +73,7 @@ router.post("/", Payslip_Validator(), async(req, res)=>{
     const {    
     candidate,
     candidate_id,
+    change_id,
     date,
     Designation,
     assigned,
@@ -95,6 +98,7 @@ router.post("/", Payslip_Validator(), async(req, res)=>{
         _id: new mongoose.Types.ObjectId(),
         candidate,
         candidate_id,
+        change_id,
         date,
         Designation,
         assigned,
@@ -263,11 +267,11 @@ router.delete("/:payslip_id", async(req, res)=>{
 });
 
 //PATCH Request for client ID :
-router.patch("/:payslip_id", Payslip_Validator(), async (req, res) => {
+router.put("/:payslip_id", Payslip_Validator(), async (req, res) => {
 
     //Error Handling for Validations :
     const errors = validationResult(req);
-    if (!errors.isEmpty()) {
+    if (errors.isEmpty()) {
 
         //Respose for Validation Error :
         return res.status(400).json({
@@ -284,7 +288,7 @@ router.patch("/:payslip_id", Payslip_Validator(), async (req, res) => {
 
         //Finding client by ID :
         const id = req.params.payslip_id;
-        const payslip = await payslip.findOne({ _id: id, isActive: true });
+        let payslip = await Payslip.findOne({ _id: id, isActive: true });
 
         if (payslip == null) {
 
@@ -298,34 +302,8 @@ router.patch("/:payslip_id", Payslip_Validator(), async (req, res) => {
             
             });
         } else {
-
-            const { candidate,date, assigned, others,other_tax, remarks,Designation,Basic,D_allow,HR_allow,Bonus,
-                conveyance,total_earnings,prof_tax,p_f_employer,p_f_employee,total_tax,td_S,net_deductions,net_salary,} = req.body;
-
-            //Updating client :
-            payslip.candidate = candidate;
-            payslip.assigned = assigned;
-            payslip.Bonus = Bonus;
-            payslip.others = others;
-            payslip.other_tax = other_tax;
-            payslip.remarks = remarks;
-            payslip.date=date;
-            payslip.Designation=Designation;
-            payslip.Basic = Basic;
-            payslip.D_allow = D_allow;
-            payslip.HR_allow = HR_allow;
-            payslip.Bonus = Bonus;
-            payslip.conveyance=conveyance;
-            payslip.total_earnings=total_earnings;
-            payslip.prof_tax=prof_tax;
-            payslip.p_f_employee=p_f_employee;
-            payslip.p_f_employer=p_f_employer;
-            payslip.total_tax=total_tax;
-            payslip.td_S=td_S;
-            payslip.net_deductions=net_deductions;
-            payslip.net_salary=net_salary;
-            const new_payslip = await payslip.save();
-
+            
+            payslip = await Payslip.findByIdAndUpdate(id,req.body);
             //Response :
             res.status(200).json({
                 "status": {
@@ -333,7 +311,7 @@ router.patch("/:payslip_id", Payslip_Validator(), async (req, res) => {
                     "code": 204,
                     "message": constants.MODEL_UPDATED
                 },
-                "data": new_payslip
+                
             });
         }
 
@@ -351,6 +329,49 @@ router.patch("/:payslip_id", Payslip_Validator(), async (req, res) => {
 });
 
 
+router.get("/filter/:newdate", async (req, res) => {
+
+    try {
+
+        //Finding schedule by ID :
+        const id = req.params.newdate;
+        const filterdate = await Payslip.find({ date : id, isActive: true });
+
+        if (filterdate == null) {
+
+            //Response if schedule not found :
+            res.status(404).json({
+                "status": {
+                    "success": false,
+                    "code": 404,
+                    "message": constants.MODEL_NOT_FOUND
+                }
+            });
+        } else {
+
+            //Response :
+            res.status(200).json({
+                "status": {
+                    "success": true,
+                    "code": 200,
+                    "message": constants.SUCCESSFUL
+                },
+                "data": filterdate
+            });
+        }
+
+        //Error Catching :
+    } catch (err) {
+        res.status(500).json({
+            "status": {
+                "success": false,
+                "code": 500,
+                "message": err.message
+            }
+        });
+        console.log(err);
+    }
+});
 
 
 module.exports = router;

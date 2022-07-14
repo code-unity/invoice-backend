@@ -11,17 +11,9 @@ module.exports = function payslip_validator() {
         check("candidate")
             .notEmpty().withMessage("Please enter candidate").bail(),
 
-        //Validation for candidate_id :
-        check("candidate_id")
+        //Validation for change_id :
+        check("change_id")
             .notEmpty().withMessage("Please enter candidate id").bail(),
-
-        //Validation for Designation :
-        check("Designation")
-            .notEmpty().withMessage("Please enter Designation").bail(),
-
-        //Validation for assigned :
-        check("assigned")
-            .notEmpty().withMessage("Please enter assigned").bail(),
 
         //Validation for Basic :
         check("Basic")
@@ -81,13 +73,10 @@ module.exports = function payslip_validator() {
         //Validation for net_salary :
         check("net_salary")
         .notEmpty().withMessage("Please enter Net Salary").bail(),
-        
-        //Validation for remarks :
-        check("remarks")
-        .notEmpty().withMessage("Please enter remarks").bail(),
 
         //Validation for Date :
         check("date")
         .notEmpty().withMessage("Please enter Date").bail(),
+
     ];
 };

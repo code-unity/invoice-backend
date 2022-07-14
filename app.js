@@ -62,7 +62,7 @@ app.use("/client", clientRouter);
 app.use("/invoice", invoiceRouter);
 app.use("/timesheet",timeSheetRouter)
 app.use("/candidate", candidateRouter);
-app.use("/payslip",payslipRouter)
+app.use("/payslip",payslipRouter);
 
 
 // catch 404 and forward to error handler

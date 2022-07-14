@@ -2,8 +2,6 @@
 var mongoose = require("mongoose");
 
 
-//Models Imported :
-var Candidate = require("../models/candidate");
 
 
 //Payroll Schema :
@@ -19,17 +17,18 @@ var payrollSchema = mongoose.Schema({
         required: [true, "Please enter candidate"]
     },
 
+    //Validation for change_id :
+
+    change_id: {
+        type: String,
+        required: [true, "Please enter change_id"]
+    },
+        
     //Validation for candidate_id :
 
     candidate_id: {
         type: String,
         required: [true, "Please enter candidate_id"]
-    },
-
-    //Validation for Date :
-    date:{
-        type: String,
-        required: [true, "Please enter Date"]
     },
 
     //Validation for Designation :
@@ -91,16 +90,16 @@ var payrollSchema = mongoose.Schema({
         required: [true, "Please enter Prof. Tax"]
     },
 
-    //Validation for p_f_employer :
-    p_f_employer: {
-        type: String,
-        required: [true, "Please enter Employer PF"]
-    },
-
     //Validation for p_f_employee :
     p_f_employee: {
         type: String,
         required: [true, "Please enter Employee PF"]
+    },
+
+    //Validation for p_f_employer :
+    p_f_employer: {
+        type: String,
+        required: [true, "Please enter Employer PF"]
     },
     
     //Validation for total_tax :
@@ -119,6 +118,7 @@ var payrollSchema = mongoose.Schema({
         type: String,
         required: [true, "Please enter other_tax"]
     },
+    
     //Validation for net_deductions :
     net_deductions: {
         type: String,
@@ -129,18 +129,21 @@ var payrollSchema = mongoose.Schema({
         type: String,
         required: [true, "Please enter net Salary"]
     },
-
+    //Validation for Date :
+    date:{
+        type: String,
+        required: [true, "Please enter Date"]
+    },
     //Validation for remarks :
     remarks: {
         type: String,
-        required: [true, "Please enter remarks"]
+        required: false
     },
-
 
     isActive:{
         type: Boolean,
-        required: [true, "Please enter Active Status"]
-    },
+        default:true
+    }
 });
 
 

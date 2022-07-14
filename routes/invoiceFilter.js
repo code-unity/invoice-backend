@@ -167,8 +167,16 @@ router.post("/", invoiceFilterValidator(), async (req, res) => {
     await sendingInvoicesViaMail(info.invoiceData, info.month, info.year, info.toEmails, info.ccEmails);
 
     await deleteGenereatedPdfs(info.invoiceData, info.month, info.year);
+
+    //response for successful execution
+    return res.status(200).json({
+        "status": {
+            "success": true,
+            "code": 200,
+        }
+    });
 }
-)
+) 
 
 // GET Request for obtaining filteredData by month and year 
 router.get("/:newmonth/:newyear", async (req, res) => {

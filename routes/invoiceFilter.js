@@ -209,7 +209,6 @@ router.get("/:newmonth/:newyear", async (req, res) => {
         const mnth = req.params.newmonth;
         const yr = req.params.newyear;
         const filteredData = await Invoice.find({ month: mnth, year: yr, isActive: true });
-        console.log(filteredData);
         if (filteredData.length == 0) {
             res.status(200).json({
                 "status": {

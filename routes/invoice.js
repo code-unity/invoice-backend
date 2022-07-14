@@ -193,54 +193,6 @@ router.get("/:invoice_id", async (req, res) => {
     }
 });
 
-// // /GET Request for Invoice ID :
-// router.get("/filterbydate/:newmonth/:newyear", async (req, res) => {
-//     function splitstring(newstring) {
-//         return date.trim().split(/\s+/)[1]
-//     }
-//     try {
-
-//         //Finding invoice by ID :
-//         const mnth = req.params.newmonth;
-//         const yr = req.params.newyear;
-//         const invoice = await Invoice.find({ splitstring(date): mnth , date: yr, isActive: true });
-
-//         if (invoice == null) {
-
-//             //Response if invoice not found :
-//             res.status(404).json({
-//                 "status": {
-//                     "success": false,
-//                     "code": 404,
-//                     "message": constants.MODEL_NOT_FOUND
-//                 }
-//             });
-//         } else {
-
-//             //Response :
-//             res.status(200).json({
-//                 "status": {
-//                     "success": true,
-//                     "code": 200,
-//                     "message": constants.SUCCESSFUL
-//                 },
-//                 "data": invoice
-//             });
-//         }
-
-//         //Error Catching :
-//     } catch (err) {
-//         res.status(500).json({
-//             "status": {
-//                 "success": false,
-//                 "code": 500,
-//                 "message": err.message
-//             }
-//         });
-//         console.log(err);
-//     }
-// });
-
 
 //DELETE Request for invoice ID :
 router.delete("/:invoice_id", async (req, res) => {
@@ -260,26 +212,26 @@ router.delete("/:invoice_id", async (req, res) => {
                 }
             });
         } else {
-             
+
             //Deleting invoice :
 
-            await Invoice.findByIdAndDelete(id,function(err,docs){
-            if(err){
-                console.log(err);
-            }
-            else{
-            
-                //Response :
-                res.status(200).json({
-                    "status": {
-                    "success": true,
-                    "code": 204,
-                    "message": constants.MODEL_DELETE
+            await Invoice.findByIdAndDelete(id, function (err, docs) {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+
+                    //Response :
+                    res.status(200).json({
+                        "status": {
+                            "success": true,
+                            "code": 204,
+                            "message": constants.MODEL_DELETE
+                        }
+                    })
+
                 }
             })
-            
-            }
-           })
             //Response :
             /*res.status(200).json({
                 "status": {

@@ -13,6 +13,12 @@ const { validationResult } = require("express-validator");
 //Validations Imported :
 var invoiceFilterValidator = require("../validations/invoiceFilter_validations");
 
+//require models
+var Invoice = require("../models/invoice");
+
+//Importing Constants :
+var constants_function = require("../constants/constants");
+var constants = constants_function("invoice");
 
 //function for reading  the html file
 async function getTemplateHtml() {
@@ -99,8 +105,8 @@ const sendingInvoicesViaMail = async (invoiceData, month, year, toEmails, ccEmai
         service: 'gmail',
         host: 'smtp.gmail.com',
         auth: {
-            user: '2019med1003@iitrpr.ac.in',
-            pass: 'Anuradha@99'
+            user: 'angajalaanuradha@gmail.com',
+            pass: 'cjanewwnuagsifrn'
         }
     });
 
@@ -108,8 +114,8 @@ const sendingInvoicesViaMail = async (invoiceData, month, year, toEmails, ccEmai
         from: 'CodeUnity Technologies private Limited',
         to: toEmails,
         cc: ccEmails,
-        subject: `Codeunity Technologies GST Invoices Report for ${month} / ${year}`,
-        text: `Hello Auditor, Please find the attached invoices for the ${month} / ${year} below`,
+        subject: `Codeunity Technologies GST Invoices Report for ${month} - ${year}`,
+        text: `Hello Auditor, Please find the attached invoices for the ${month} - ${year} below`,
         attachments: invoices,
     };
 
@@ -135,6 +141,7 @@ const deleteGenereatedPdfs = async (invoiceData, month, year) => {
     }
 }
 
+//post request for invoice pdf generation and mailing
 router.post("/", invoiceFilterValidator(), async (req, res) => {
 
     const errors = validationResult(req);
@@ -162,6 +169,49 @@ router.post("/", invoiceFilterValidator(), async (req, res) => {
     await deleteGenereatedPdfs(info.invoiceData, info.month, info.year);
 }
 )
+
+// GET Request for obtaining filteredData by month and year 
+router.get("/:newmonth/:newyear", async (req, res) => {
+    try {
+        const mnth = req.params.newmonth;
+        const yr = req.params.newyear;
+        const filteredData = await Invoice.find({ month: mnth, year: yr, isActive: true });
+
+        if (filteredData == null) {
+
+            //Response if invoice not found :
+            res.status(404).json({
+                "status": {
+                    "success": false,
+                    "code": 404,
+                    "message": constants.MODEL_NOT_FOUND
+                }
+            });
+        } else {
+
+            //Response :
+            res.status(200).json({
+                "status": {
+                    "success": true,
+                    "code": 200,
+                    "message": constants.SUCCESSFUL
+                },
+                "data": filteredData
+            });
+        }
+
+        //Error Catching :
+    } catch (err) {
+        res.status(500).json({
+            "status": {
+                "success": false,
+                "code": 500,
+                "message": err.message
+            }
+        });
+        console.log(err);
+    }
+});
 
 module.exports = router;
 

@@ -92,31 +92,53 @@ const invoicePdfsGeneration = async (invoiceData, month, year) => {
 
 }
 
-//function for sending the Generated invoices pdf via provided mail  
-const sendingInvoicesViaMail = async (invoiceData, month, year, toEmails, ccEmails) => {
-    const invoices = []
-    for (var i = 0; i < invoiceData.length; i++) {
-        invoices.push({
-            filename: `${invoiceData[i].invoice_number}-${month}-${year}.pdf`,
-            path: __dirname.replace("routes", "Invoices") + "/" + `${invoiceData[i].invoice_number}-${month}-${year}.pdf`,
-        })
-    }
+//function for sending the Generated invoices pdf via provided mail
+
+//It takes an object as parameter, the object structure is as follows
+/*
+  {   
+        from: A valid from address email id 
+        
+        password: password of the from address email id 
+        
+        to: [] An array of receivers email ids [at least one email id should be there]
+
+        cc: [] An array of cc email ids  [if there are no cc emails pass empty array]
+
+        bcc : [] An array of bcc email ids  [if there are no bcc emails pass empty array]
+
+        subject: subject of Email [if there is no subject pass empty string]
+
+        body:content of the Email [if there is no content pass empty string] 
+
+        attachments : [  
+                       { 
+                          filename : attachment name,
+                          path : path of the attachment
+                        }
+                     ]  An array of objects,
+       If there are no attachments pass empty array
+  }  
+*/
+const sendingInvoicesViaMail = async (obj) => {
+
     var transporter = await nodemailer.createTransport({
         service: 'gmail',
         host: 'smtp.gmail.com',
         auth: {
-            user: 'angajalaanuradha@gmail.com',
-            pass: 'cjanewwnuagsifrn'
+            user: obj.from,
+            pass: obj.password,
         }
     });
 
     var mailOptions = {
         from: 'CodeUnity Technologies private Limited',
-        to: toEmails,
-        cc: ccEmails,
-        subject: `Codeunity Technologies GST Invoices Report for ${month} - ${year}`,
-        text: `Hello Auditor, Please find the attached invoices for the ${month} - ${year} below`,
-        attachments: invoices,
+        to: obj.to,
+        cc: obj.cc,
+        bcc: obj.bcc,
+        subject: obj.subject,
+        text: obj.body,
+        attachments: obj.attachments,
     };
 
     try {
@@ -157,10 +179,10 @@ router.post("/", invoiceFilterValidator(), async (req, res) => {
         });
     }
 
-    const info = req.body;
+    const { toEmails, ccEmails, month, year, invoiceData } = req.body;
 
     //calling the pdf's generation function
-    const pdfError = await invoicePdfsGeneration(info.invoiceData, info.month, info.year);
+    const pdfError = await invoicePdfsGeneration(invoiceData, month, year);
 
     //response, when pdf generation failed
     if (pdfError) {
@@ -174,11 +196,30 @@ router.post("/", invoiceFilterValidator(), async (req, res) => {
         });
     }
 
+    //storing the generated pdfs, with filename and path for sending pdfs as attachments
+    const invoices = []
+    for (var i = 0; i < invoiceData.length; i++) {
+        invoices.push({
+            filename: `${invoiceData[i].invoice_number}-${month}-${year}.pdf`,
+            path: __dirname.replace("routes", "Invoices") + "/" + `${invoiceData[i].invoice_number}-${month}-${year}.pdf`,
+        })
+    }
+
     //calling the mail sending function
-    const emailError = await sendingInvoicesViaMail(info.invoiceData, info.month, info.year, info.toEmails, info.ccEmails);
+    const mailParameters = {
+        from: 'angajalaanuradha@gmail.com',
+        password: 'cjanewwnuagsifrn',
+        to: toEmails,
+        cc: ccEmails,
+        bcc: [],
+        subject: `Codeunity Technologies GST Invoices Report for ${month} - ${year}`,
+        body: `Hello Auditor, Please find the attached invoices for the ${month} - ${year} below`,
+        attachments: invoices,
+    }
+    const emailError = await sendingInvoicesViaMail(mailParameters);
 
     //Delete the pdf files generated
-    await deleteGenereatedPdfs(info.invoiceData, info.month, info.year);
+    await deleteGenereatedPdfs(invoiceData, month, year);
 
     //response, when the email sending unsuccessful due to poor connectivity or any other problems
     if (emailError) {
@@ -187,7 +228,7 @@ router.post("/", invoiceFilterValidator(), async (req, res) => {
             "status": {
                 "success": false,
                 "code": 400,
-                "message": "Invoices sending Failed, might be due to poor internet"
+                "message": "Email not sent, Network Error"
             }
         });
     }
@@ -201,7 +242,7 @@ router.post("/", invoiceFilterValidator(), async (req, res) => {
         }
     });
 }
-)
+) 
 
 // GET Request for obtaining filteredData by month and year 
 router.get("/:newmonth/:newyear", async (req, res) => {
@@ -209,27 +250,14 @@ router.get("/:newmonth/:newyear", async (req, res) => {
         const mnth = req.params.newmonth;
         const yr = req.params.newyear;
         const filteredData = await Invoice.find({ month: mnth, year: yr, isActive: true });
-        if (filteredData.length == 0) {
-            res.status(200).json({
-                "status": {
-                    "success": true,
-                    "code": 200,
-                    "message": `There are no invoices in ${mnth} ${yr}`
-                },
-                "data": filteredData
-            });
-        }
-        else {
-            res.status(200).json({
-                "status": {
-                    "success": true,
-                    "code": 200,
-                    "message": "Invoices Fetched Successfully"
-                },
-                "data": filteredData
-            });
-        }
-
+        res.status(200).json({
+            "status": {
+                "success": true,
+                "code": 200,
+                "message": "Invoices Fetched Successfully"
+            },
+            "data": filteredData
+        });
     }
     catch (err) {
         res.status(500).json({

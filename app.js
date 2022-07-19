@@ -10,8 +10,6 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 var cors = require("cors");
-
-
 //Importing Config File :
 var config = require("./config/config.json");
 
@@ -88,6 +86,6 @@ app.use(function (err, req, res, next) {
     res.render("error");
 });
 
-
+var msg = require("./scheduleCron.js");
 
 module.exports = app; 

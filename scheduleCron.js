@@ -10,6 +10,9 @@ var express = require("express");
 var fs = require("fs");
 var handlebars = require("handlebars");
 const puppeteer = require("puppeteer");
+const ScheduleStatus = require("./models/scheduleStatus");
+var scheduleStatus=[] ;
+
  
 function validateStartDate(date){
     const currDate = new Date();
@@ -42,21 +45,25 @@ const filterSchedules = async () =>{
     var scheduleFilter = await schedule.find({isActive: true});
     scheduleFilter.filter(function(item) {
         if(item.frequency=== "Daily" && item.isDisabled === false && validateStartDate(item.date)){
+            scheduleStatus.push({date: new Date().toDateString() ,scheduleId: item._id, invoiceId: "", invoiceFetchStatus: "false",pdfPrintStatus: "false", sendMailStatus: "false"});
             filteredSchedules.push(item);
         }
     });
     scheduleFilter.filter(function(item) {
         if(item.frequency=== "Monthly" && item.isDisabled === false && validateStartDate(item.date) && new Date(item.date).getDate() === new Date().getDate()){
+            scheduleStatus.push({date: new Date().toDateString() ,scheduleId: item._id, invoiceId: "",invoiceFetchStatus: "false",pdfPrintStatus: "false", sendMailStatus: "false"});
             filteredSchedules.push(item);
         }
     });
     scheduleFilter.filter(function(item) {
         if(item.frequency=== "Weekly" && item.isDisabled === false && validateStartDate(item.date) && new Date().toDateString().split(" ")[0] === new Date(item.date).toDateString().split(" ")[0]){
+            scheduleStatus.push({date: new Date().toDateString() ,scheduleId: item._id, invoiceId: "",invoiceFetchStatus: "false",pdfPrintStatus: "false", sendMailStatus: "false"});
             filteredSchedules.push(item);
         }
     });
     scheduleFilter.filter(function(item) {
         if(item.frequency=== "Anually" && item.isDisabled === false && validateStartDate(item.date) && new Date(item.date).getDate() === new Date().getDate() && new Date(item.date).getMonth() === new Date().getMonth() ){
+            scheduleStatus.push({date: new Date().toDateString() ,scheduleId: item._id, invoiceId: "",invoiceFetchStatus: "false",pdfPrintStatus: "false", sendMailStatus: "false"});
             filteredSchedules.push(item);
         }
     });
@@ -68,14 +75,22 @@ async function filterInvoices(filteredSchedules) {
     var invoiceFilter;
     for(let i =0 ; i< filteredSchedules.length ; i++){
         invoiceFilter = await invoice.find({_id : filteredSchedules[i].invoiceNumber});
-        invoiceFilter.filter(function(item) {
-            if( item.isActive === true ){
-                const newInvoice = item;
-                newInvoice.date = new Date().toDateString();
-                item=newInvoice;
-                filteredInvoices.push(item);
-            }
-        });
+        try{
+            invoiceFilter.filter(function(item) {
+                if( item.isActive === true ){
+                    const newInvoice = item;
+                    newInvoice.date = new Date().toDateString();
+                    item=newInvoice;
+                    scheduleStatus[i].invoiceFetchStatus="true";
+                    scheduleStatus[i].invoiceId=filteredSchedules[i].invoiceNumber;
+                    filteredInvoices.push(item);
+                }
+            });
+        }
+        catch(err){
+            console.log(`Unable to find the invoice details with id ${filteredSchedules[i].invoiceNumber}`);
+        }
+        
     }
     return filteredInvoices;
 }
@@ -114,7 +129,15 @@ const sendMail = async(filteredInvoices) => {
 };
 const invoicePdfsGeneration = async (filteredInvoices) => {
     for (var i = 0; i < filteredInvoices.length; i++){
-        await generatePdf(filteredInvoices[i]);
+        try{
+            await generatePdf(filteredInvoices[i]);
+            var findInvoiceById=scheduleStatus.filter(obj => obj.invoiceId == filteredInvoices[i]._id);
+            findInvoiceById[0].pdfPrintStatus="true";
+            findInvoiceById[0].sendMailStatus="true";
+        }
+        catch(err){
+            console.log(`failed to generate pdf for invoice Id : ${filteredInvoices[i]._id}`);
+        }
     }
         
 };
@@ -150,9 +173,11 @@ async function generatePdf(invoiceData) {
 
         //Closing Browser :
         await browser.close();
+        return true;
     } 
     catch (err) {
         console.error(err);
+        return false;
     }
 }
 
@@ -172,6 +197,8 @@ const procedure = async() => {
     await invoicePdfsGeneration(invoicesToSend);
     await sendMail(invoicesToSend);
     await deleteGenereatedPdfs(invoicesToSend);
+    ScheduleStatus.insertMany(scheduleStatus);
+
 }; 
- 
-nodeCron.schedule("1 1 1 1 1 1", procedure);
+procedure();
+// nodeCron.schedule("1 * * * * *", procedure);

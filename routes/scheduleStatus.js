@@ -33,11 +33,11 @@ router.post("/", ScheduleStatus_Validator(), async (req, res) => {
         });
     }
     try {
-        const { scheduleId, invoiceId,invoiceFetchStatus , pdfPrintStatus, sendMailStatus } = req.body;
+        const { scheduleId, invoiceId, status } = req.body;
         const scheduleStatus = new ScheduleStatus({
             _id: new mongoose.Types.ObjectId(),
             date: new Date().toDateString(),
-            scheduleId,invoiceId, invoiceFetchStatus ,pdfPrintStatus, sendMailStatus
+            scheduleId,invoiceId, status,
         });
         const new_scheduleStatus = await scheduleStatus.save();
         res.status(200).json({

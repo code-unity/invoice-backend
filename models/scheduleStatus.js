@@ -20,17 +20,8 @@ var scheduleSchema = mongoose.Schema({
         type: String,
         required: [true, "please enter scheduleId"]
     },
-    invoiceFetchStatus: {
-        type: String,
-        required: [true, "please enter invoiceFetchStatus"]
-    },
 
-    pdfPrintStatus: {
-        type: String,
-        required: [true, "please enter pdfPrintStatus"]
-    },
-
-    sendMailStatus: {
+    status: {
         type: String,
         required: [true, "please Enter sendMailStatus"]
     },

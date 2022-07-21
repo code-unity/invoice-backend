@@ -88,6 +88,5 @@ app.use(function (err, req, res, next) {
     res.render("error");
 });
 
-var msg = require("./scheduleCron.js");
 
 module.exports = app; 

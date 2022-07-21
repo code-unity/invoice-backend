@@ -8,13 +8,7 @@ module.exports = function ScheduleStatus_validator() {
         check("invoiceId")
             .notEmpty().withMessage("Please enter scheduleId").bail(),
         
-        check("invoiceFetchStatus")
-            .notEmpty().withMessage("Please enter invoiceFetchStatus").bail(),
-
-        check("pdfPrintStatus")
-            .notEmpty().withMessage("Please enter pdfPrintStatus").bail(),
-
-        check("sendMailStatus")
+        check("status")
             .notEmpty().withMessage("Please enter endMailStatus").bail(),
     ];
 };

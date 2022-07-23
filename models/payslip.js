@@ -16,13 +16,6 @@ var payrollSchema = mongoose.Schema({
         type: String,
         required: [true, "Please enter candidate"]
     },
-
-    //Validation for change_id :
-
-    change_id: {
-        type: String,
-        required: [true, "Please enter change_id"]
-    },
         
     //Validation for candidate_id :
 
@@ -35,6 +28,12 @@ var payrollSchema = mongoose.Schema({
     Designation: {
         type: String,
         required: [true, "Please enter Designation"]
+    },
+
+    //Validation for type :
+    type: {
+        type: String,
+        required: [true, "Please enter type"]
     },
 
     //Validation for assigned :

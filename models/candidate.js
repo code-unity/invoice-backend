@@ -15,8 +15,8 @@ var candidateSchema = mongoose.Schema({
     //Validation for Email :
     email: {
         type: String,
-        unique: [true, "email already exists"],
-        required: [true, "please enter email address"],
+        required: false,
+        unique: false,
         lowercase: [true, "email address must be lowercase"],
         validate: [
             {
@@ -27,6 +27,23 @@ var candidateSchema = mongoose.Schema({
             }
         ]
     },
+
+    //Validation for Pan No :
+    pan_no: {
+        type: String,
+        unique: [true, "Pancard already exists"],
+        required: [true, "Please enter Pan No"],
+        validate: [
+            {
+                validator: function(v) {
+                    return  /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/.test(v);
+                },
+                Error: "please enter a valid email address"
+            }
+        ]
+
+    },
+    
     //Validation for Date of Birth :
     date_of_birth: {
         type: String,
@@ -135,11 +152,13 @@ var candidateSchema = mongoose.Schema({
         required: [true, "Please enter Designation"]
     },
 
-    //Validation for Pan No :
-    pan_no: {
+    //Validation for Designation :
+    type: {
         type: String,
-        required: [true, "Please enter Pan No"]
+        required: [true, "Please enter Type of employee"]
     },
+
+
    
 });
 

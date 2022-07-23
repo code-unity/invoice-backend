@@ -5,13 +5,10 @@
 var express = require("express");
 var router = express.Router();
 var mongoose = require("mongoose");
-var path = require("path");
 var fs = require("fs");
 var puppeteer = require("puppeteer");
 var handlebars = require("handlebars");
 const { validationResult } = require("express-validator");
-
-
 
 //Middleware's Imported :
 var SF_Pag = require("../middlewares/search_functionality-Pagination");          //Middleware for Search-Functionality and Pagination
@@ -19,6 +16,7 @@ var SF_Pag = require("../middlewares/search_functionality-Pagination");         
 
 //Models Imported :
 var Payslip =  require("../models/payslip");
+var Invoice = require("../models/invoice");
 
 
 //Validations Imported :
@@ -27,7 +25,6 @@ var Payslip_Validator = require("../validations/payslip_validations");
 
 //Importing Constants :
 var constants_function = require("../constants/constants");
-const payslip = require("../models/payslip");
 var constants = constants_function("payslip");
 
 
@@ -73,7 +70,7 @@ router.post("/", Payslip_Validator(), async(req, res)=>{
     const {    
     candidate,
     candidate_id,
-    change_id,
+    type,
     date,
     Designation,
     assigned,
@@ -98,7 +95,7 @@ router.post("/", Payslip_Validator(), async(req, res)=>{
         _id: new mongoose.Types.ObjectId(),
         candidate,
         candidate_id,
-        change_id,
+        type,
         date,
         Designation,
         assigned,
@@ -271,7 +268,7 @@ router.put("/:payslip_id", Payslip_Validator(), async (req, res) => {
 
     //Error Handling for Validations :
     const errors = validationResult(req);
-    if (errors.isEmpty()) {
+    if (!errors.isEmpty()) {
 
         //Respose for Validation Error :
         return res.status(400).json({
@@ -279,11 +276,9 @@ router.put("/:payslip_id", Payslip_Validator(), async (req, res) => {
                 "success": false,
                 "code": 400,
                 "message": errors.array()[0].msg
-                
             }
         });
     }
-
     try {
 
         //Finding client by ID :
@@ -291,7 +286,6 @@ router.put("/:payslip_id", Payslip_Validator(), async (req, res) => {
         let payslip = await Payslip.findOne({ _id: id, isActive: true });
 
         if (payslip == null) {
-
             //Response if client not found :
             res.status(404).json({
                 "status": {
@@ -373,5 +367,282 @@ router.get("/filter/:newdate", async (req, res) => {
     }
 });
 
+function getMonths(mon){
+    return new Date(mon).getMonth()+1
+ } 
+
+ function getyears(mon){
+    return new Date(mon).getFullYear()
+ } 
+ 
+async function getData(frmdate,tdate){
+    const returnData={
+      totalAmount:0,
+      gST:0,
+      tDs:0,
+      salaries:0  
+    };
+    var invoiceData =  await Invoice.find({isActive: true });
+    var filterData =invoiceData.filter(function(a) {
+        tempDate=a.date
+        tempDate=tempDate+"Z"
+        var temp = new Date(tempDate);
+        if(temp>=frmdate && temp<=tdate){
+            return true
+        }
+        return false
+    });
+for(i=0;i<filterData.length;i++)
+{
+    var amount = filterData[i].balance_due
+    amount=amount.replace(/\₹|,/g, "");
+    amount=amount.replace(/\£|,/g, "");
+    
+    if (amount== "" || amount =="NaN"){
+        amount=0}
+    if(amount[2]=="$"){
+        amount=amount.replace(/\$|,/g, "");
+        amount=amount.replace(/U/g, "");
+        amount=amount.replace(/S/g, "");
+    }
+    returnData.totalAmount+=parseInt(amount)
+    if(filterData[i].gstAmount){
+        filterData[i].gstAmount.replace("\u20b9", "")
+        returnData.gST+=parseInt(filterData[i].gstAmount)
+    }
+    // if(!filterData[i].gstAmount){
+    //     amount=amount*(1-filterData[i].tax)
+    //     returnData.gST+=parseInt(filterData[i].gstAmount)
+    // }
+}
+
+var salaryData =  await Payslip.find({isActive: true });
+var filterData =salaryData.filter(function(a) {
+    tempDate=a.date
+    tempDate=tempDate+"Z"
+    var temp = new Date(tempDate);
+    if(temp>=frmdate && temp<=tdate){
+        return true
+    }
+    return false
+});
+
+for(i=0;i<filterData.length;i++)
+{
+var amount = filterData[i].net_salary
+var tds = filterData[i].td_S
+returnData.salaries+=parseFloat(amount)
+returnData.tDs+=parseFloat(tds)
+}
+return returnData
+
+}
+router.post("/total/", async (req, res) => {
+    const {
+    fromdate,
+    todate
+    } = req.body
+
+    const state={fromdate,todate};
+    const startmnth =getMonths(state.fromdate);
+    const endmnth = getMonths(state.todate)+1;
+    const startyear = getyears(state.fromdate)
+    const endyear = getyears(state.todate)
+    //console.log(startmnth,endmnth,startyear,endyear)
+    var frmdate = startyear+"-"+startmnth+"Z";
+    frmdate=new Date(frmdate)
+    var tdate = endyear+"-"+endmnth;
+    tdate=new Date(tdate)
+    //console.log(frmdate,tdate)
+
+
+    const ans= await getData(frmdate,tdate)
+    //console.log(ans)
+        //Response :
+        res.status(201).send({
+            "status": {
+                "success": true,
+                "code": 201,
+                "message": constants.MODEL_CREATE
+            },
+            "data": ans
+        });
+});
+
+async function gethalfData(frmdate,tdate){
+
+    const returnData={
+      gST:0,
+      tDs:0,
+      salaries:0  
+    };
+    var invoiceData =  await Invoice.find({isActive: true });
+    var filterData =invoiceData.filter(function(a) {
+        tempDate=a.date
+        tempDate=tempDate+"Z"
+        var temp = new Date(tempDate);
+        if(temp>=frmdate && temp<=tdate){
+            return true
+        }
+        return false
+    });
+for(i=0;i<filterData.length;i++)
+{  
+    if(filterData[i].gstAmount){
+        filterData[i].gstAmount.replace("\u20b9", "")
+        returnData.gST+=parseInt(filterData[i].gstAmount)
+    } 
+}
+
+var salaryData =  await Payslip.find({isActive: true });
+var filterData =salaryData.filter(function(a) {
+    tempDate=a.date
+    tempDate=tempDate+"Z"
+    var temp = new Date(tempDate);
+    if(temp>=frmdate && temp<=tdate){
+        return true
+    }
+    return false
+});
+for(i=0;i<filterData.length;i++)
+{
+var amount = filterData[i].net_salary
+var tds = filterData[i].td_S
+returnData.salaries+=parseFloat(amount)
+returnData.tDs+=parseFloat(tds)
+}
+
+
+return returnData
+}
+
+router.post("/half/", async (req, res) => {
+    const {
+    fromdate,
+    todate
+    } = req.body
+
+    const state={fromdate,todate};
+    const startmnth =getMonths(state.fromdate);
+    const endmnth = getMonths(state.todate)+1;
+    const startyear = getyears(state.fromdate)
+    const endyear = getyears(state.todate)
+    //console.log(startmnth,endmnth,startyear,endyear)
+    var frmdate = startyear+"-"+startmnth+"Z";
+    frmdate=new Date(frmdate)
+    var tdate = endyear+"-"+endmnth;
+    tdate=new Date(tdate)
+    //console.log(frmdate,tdate)
+
+
+    const ans= await gethalfData(frmdate,tdate)
+    //console.log(ans)
+        //Response :
+        res.status(201).send({
+            "status": {
+                "success": true,
+                "code": 201,
+                "message": constants.MODEL_CREATE
+            },
+            "data": ans
+        });
+});
+
+router.post("/tds/", async (req, res) => {
+
+    try {
+        const {
+            fromdate,
+            todate
+            } = req.body
+    
+        const state={fromdate,todate};
+        const ans= await gettdsData(state)
+        //console.log(ans)
+        
+            //Response :
+            res.status(200).json({
+                "status": {
+                    "success": true,
+                    "code": 200,
+                    "message": constants.SUCCESSFUL
+                },
+                "data": ans
+            });
+        
+
+
+        //Error Catching :
+    } catch (err) {
+        res.status(500).json({
+            "status": {
+                "success": false,
+                "code": 500,
+                "message": err.message
+            }
+        });
+        console.log(err);
+    }
+});
+
+async function gettdsData(state){
+
+    const returnData={
+        fullTimedata:[],
+        internData:[]
+    };
+        var total = (getMonths(state.todate)-getMonths(state.fromdate)+1) + 12*(getyears(state.todate)-getyears(state.fromdate))
+        console.log(total)
+
+        currmnth=getMonths(state.fromdate)
+        curryear=getyears(state.fromdate)
+    var salaryData =  await Payslip.find({isActive: true, type:"Full-Time"});
+    for (var i=0;i<total;i++){
+        var temp =salaryData.filter(function(a) {
+        tempMonth=getMonths(a.date)
+        tempYear=getyears(a.date)
+        if(tempMonth === currmnth && tempYear === curryear){
+            return true
+        }
+        return false
+    });
+    let sum=0
+    temp.map(a=>
+        sum+=parseFloat(a.td_S))
+    temp.push(sum)
+    if(temp.length!=0){(returnData.fullTimedata).push(temp)
+    }
+    if(currmnth<12){
+        currmnth+=1
+    }
+    else{
+        currmnth-=12
+        curryear+=1        
+    }
+}
+currmnth=getMonths(state.fromdate)
+curryear=getyears(state.fromdate)
+var salaryData =  await Payslip.find({isActive: true, type:"Internship"});
+    for (var i=0;i<total;i++){
+        var temp =salaryData.filter(function(a) {
+        tempMonth=getMonths(a.date)
+        tempYear=getyears(a.date)
+        if(tempMonth === currmnth && tempYear === curryear){
+            return true
+        }
+        return false
+    });
+    if(temp != []){(returnData.internData).push(temp)
+    }
+    if(currmnth<12){
+        currmnth+=1
+    }
+    else{
+        currmnth-=12
+        curryear+=1        
+    }
+}
+return returnData
+}
 
 module.exports = router;

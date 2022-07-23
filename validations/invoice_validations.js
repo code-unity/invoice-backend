@@ -58,6 +58,10 @@ module.exports = function client_validator() {
         check("balance_due")
             .notEmpty().withMessage("Please enter balance due").bail(),
 
+        //Validation for gstAmount :
+        check("gstAmount")
+            .notEmpty().withMessage("Please enter GST Amount").bail(),
+            
         //Validation for payment terms :
         check("total")
             .notEmpty().withMessage("Please enter total").bail(),

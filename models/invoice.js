@@ -134,7 +134,11 @@ var invoiceSchema = mongoose.Schema({
         type: String,
         required: false
     },
-
+    //Validation for gstAmount Paid :
+    gstAmount: {
+        type: String,
+        required: [true, "Please enter gstAmount"]
+    },
     //Validation for terms :
     terms: {
         type: String,

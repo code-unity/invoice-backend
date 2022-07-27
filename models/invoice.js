@@ -16,7 +16,7 @@ var invoiceSchema = mongoose.Schema({
     required: [true, 'Please select the client'],
   },
 
-  //Validation for Bill from :
+  //Validation for Invoice Number :
   invoice_number: {
     type: String,
     required: [true, 'Please enter invoice number'],

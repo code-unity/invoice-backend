@@ -245,7 +245,7 @@ router.delete("/:client_id", async (req, res) => {
         } else {
 
             //Deleting client :
-            await Client.findByIdAndUpdate(id, { isActive: false });
+            await Client.deleteOne({_id : id});
 
             //Response :
             res.status(200).json({
@@ -272,4 +272,4 @@ router.delete("/:client_id", async (req, res) => {
 
 
 
-module.exports = router;
+module.exports = router; 

@@ -375,12 +375,14 @@ function getMonths(mon){
     return new Date(mon).getFullYear()
  } 
  
-async function getData(frmdate,tdate){
+async function getData(frmdate,tdate,fromdate,todate){
     const returnData={
       totalAmount:0,
       gST:0,
       tDs:0,
-      salaries:0  
+      salaries:0,
+      payslipList:[],
+      invoiceList:[]
     };
     var invoiceData =  await Invoice.find({isActive: true });
     var filterData =invoiceData.filter(function(a) {
@@ -434,6 +436,54 @@ var tds = filterData[i].td_S
 returnData.salaries+=parseFloat(amount)
 returnData.tDs+=parseFloat(tds)
 }
+
+    var total = (getMonths(todate)-getMonths(fromdate)+1) + 12*(getyears(todate)-getyears(fromdate))
+    console.log(total)
+
+    currmnth=getMonths(fromdate)
+    curryear=getyears(fromdate)
+    var salaryData =  await Payslip.find({isActive: true});
+    for (var i=0;i<total;i++){
+    var temp =salaryData.filter(function(a) {
+    tempMonth=getMonths(a.date)
+    tempYear=getyears(a.date)
+    if(tempMonth === currmnth && tempYear === curryear){
+        return true
+    }
+    return false
+    });
+    (returnData.payslipList).push(temp)
+    
+    if(currmnth<12){
+    currmnth+=1
+    }
+    else{
+    currmnth-=12
+    curryear+=1        
+    }
+}
+    currmnth=getMonths(fromdate)
+    curryear=getyears(fromdate)
+    var salaryData =  await Invoice.find({isActive: true});
+    for (var i=0;i<total;i++){
+    temp =salaryData.filter(function(a) {
+    tempMonth=getMonths(a.date)
+    tempYear=getyears(a.date)
+    if(tempMonth === currmnth && tempYear === curryear){
+        return true
+    }
+    return false
+    });
+    (returnData.invoiceList).push(temp)
+
+    if(currmnth<12){
+    currmnth+=1
+    }
+    else{
+    currmnth-=12
+    curryear+=1        
+    }
+    }
 return returnData
 
 }
@@ -448,15 +498,15 @@ router.post("/total/", async (req, res) => {
     const endmnth = getMonths(state.todate)+1;
     const startyear = getyears(state.fromdate)
     const endyear = getyears(state.todate)
-    //console.log(startmnth,endmnth,startyear,endyear)
+    console.log(startmnth,endmnth,startyear,endyear)
     var frmdate = startyear+"-"+startmnth+"Z";
     frmdate=new Date(frmdate)
     var tdate = endyear+"-"+endmnth;
     tdate=new Date(tdate)
-    //console.log(frmdate,tdate)
+    console.log(frmdate,tdate)
 
 
-    const ans= await getData(frmdate,tdate)
+    const ans= await getData(frmdate,tdate,fromdate,todate)
     //console.log(ans)
         //Response :
         res.status(201).send({
@@ -527,12 +577,12 @@ router.post("/half/", async (req, res) => {
     const endmnth = getMonths(state.todate)+1;
     const startyear = getyears(state.fromdate)
     const endyear = getyears(state.todate)
-    //console.log(startmnth,endmnth,startyear,endyear)
+    console.log(startmnth,endmnth,startyear,endyear)
     var frmdate = startyear+"-"+startmnth+"Z";
     frmdate=new Date(frmdate)
     var tdate = endyear+"-"+endmnth;
     tdate=new Date(tdate)
-    //console.log(frmdate,tdate)
+    console.log(frmdate,tdate)
 
 
     const ans= await gethalfData(frmdate,tdate)
@@ -597,6 +647,7 @@ async function gettdsData(state){
         currmnth=getMonths(state.fromdate)
         curryear=getyears(state.fromdate)
     var salaryData =  await Payslip.find({isActive: true, type:"Full-Time"});
+    var amount=0
     for (var i=0;i<total;i++){
         var temp =salaryData.filter(function(a) {
         tempMonth=getMonths(a.date)
@@ -610,6 +661,9 @@ async function gettdsData(state){
     temp.map(a=>
         sum+=parseFloat(a.td_S))
     temp.push(sum)
+   
+    var x= parseFloat(amount) + parseFloat((sum));
+    amount=x.toFixed(2)
     if(temp.length!=0){(returnData.fullTimedata).push(temp)
     }
     if(currmnth<12){
@@ -620,8 +674,10 @@ async function gettdsData(state){
         curryear+=1        
     }
 }
+(returnData.fullTimedata).push(amount)
 currmnth=getMonths(state.fromdate)
 curryear=getyears(state.fromdate)
+amount=0
 var salaryData =  await Payslip.find({isActive: true, type:"Internship"});
     for (var i=0;i<total;i++){
         var temp =salaryData.filter(function(a) {
@@ -632,7 +688,15 @@ var salaryData =  await Payslip.find({isActive: true, type:"Internship"});
         }
         return false
     });
-    if(temp != []){(returnData.internData).push(temp)
+    sum=0
+    temp.map(a=>
+        sum+=parseFloat(a.td_S))
+    temp.push(sum)
+   
+    x= parseFloat(amount) + parseFloat((sum));
+    amount=x.toFixed(2)
+
+    if(temp.length!=0){(returnData.internData).push(temp)
     }
     if(currmnth<12){
         currmnth+=1
@@ -642,6 +706,7 @@ var salaryData =  await Payslip.find({isActive: true, type:"Internship"});
         curryear+=1        
     }
 }
+(returnData.internData).push(amount)
 return returnData
 }
 

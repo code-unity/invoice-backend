@@ -51,7 +51,7 @@ router.post("/", Client_Validator(), async (req, res) => {
       },
     });
   }
-
+  // console.log(req.body);
   try {
     const {
       client_name,
@@ -63,6 +63,7 @@ router.post("/", Client_Validator(), async (req, res) => {
       terms,
       toEmails,
       ccEmails,
+      emailContent,
     } = req.body;
 
     //Creating new client :
@@ -77,8 +78,8 @@ router.post("/", Client_Validator(), async (req, res) => {
       terms,
       toEmails,
       ccEmails,
+      emailContent,
     });
-    console.log("client is ", client);
     const new_client = await client.save();
 
     //Response :

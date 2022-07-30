@@ -438,7 +438,6 @@ returnData.tDs+=parseFloat(tds)
 }
 
     var total = (getMonths(todate)-getMonths(fromdate)+1) + 12*(getyears(todate)-getyears(fromdate))
-    console.log(total)
 
     currmnth=getMonths(fromdate)
     curryear=getyears(fromdate)
@@ -495,20 +494,16 @@ router.post("/total/", async (req, res) => {
 
     const state={fromdate,todate};
     const startmnth =getMonths(state.fromdate);
-    const endmnth = getMonths(state.todate)+1;
+    const endmnth = getMonths(state.todate);
     const startyear = getyears(state.fromdate)
     const endyear = getyears(state.todate)
-    console.log(startmnth,endmnth,startyear,endyear)
     var frmdate = startyear+"-"+startmnth+"Z";
     frmdate=new Date(frmdate)
-    var tdate = endyear+"-"+endmnth;
-    tdate=new Date(tdate)
-    console.log(frmdate,tdate)
-
+    var tdate=new Date(endyear,endmnth)
 
     const ans= await getData(frmdate,tdate,fromdate,todate)
-    //console.log(ans)
-        //Response :
+
+    //Response :
         res.status(201).send({
             "status": {
                 "success": true,
@@ -574,20 +569,16 @@ router.post("/half/", async (req, res) => {
 
     const state={fromdate,todate};
     const startmnth =getMonths(state.fromdate);
-    const endmnth = getMonths(state.todate)+1;
+    const endmnth = getMonths(state.todate);
     const startyear = getyears(state.fromdate)
     const endyear = getyears(state.todate)
-    console.log(startmnth,endmnth,startyear,endyear)
     var frmdate = startyear+"-"+startmnth+"Z";
     frmdate=new Date(frmdate)
-    var tdate = endyear+"-"+endmnth;
-    tdate=new Date(tdate)
-    console.log(frmdate,tdate)
+    var tdate=new Date(endyear,endmnth)
 
 
     const ans= await gethalfData(frmdate,tdate)
-    //console.log(ans)
-        //Response :
+
         res.status(201).send({
             "status": {
                 "success": true,
@@ -608,7 +599,6 @@ router.post("/tds/", async (req, res) => {
     
         const state={fromdate,todate};
         const ans= await gettdsData(state)
-        //console.log(ans)
         
             //Response :
             res.status(200).json({
@@ -642,8 +632,6 @@ async function gettdsData(state){
         internData:[]
     };
         var total = (getMonths(state.todate)-getMonths(state.fromdate)+1) + 12*(getyears(state.todate)-getyears(state.fromdate))
-        console.log(total)
-
         currmnth=getMonths(state.fromdate)
         curryear=getyears(state.fromdate)
     var salaryData =  await Payslip.find({isActive: true, type:"Full-Time"});

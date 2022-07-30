@@ -53,7 +53,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 //API Routes :
-app.use('/api/admin', adminRouter)
+app.use('/admin', adminRouter)
 app.use('/client', clientRouter)
 app.use('/invoice', invoiceRouter)
 app.use('/timesheet', timeSheetRouter)

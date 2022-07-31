@@ -34,9 +34,9 @@ var invoiceRouter = require("./routes/invoice");
 var timeSheetRouter = require("./routes/timesheet");
 var candidateRouter = require("./routes/candidate");
 var scheduleRouter = require("./routes/schedule");
-
 var invoiceFilterRouter = require("./routes/invoiceFilter");
 var payslipRouter = require("./routes/payslip");
+var usersRouter = require("./routes/users");
 
 //Express Application :
 var app = express();
@@ -61,6 +61,7 @@ app.use("/candidate", candidateRouter);
 app.use("/invoiceFilter", invoiceFilterRouter.router);
 app.use("/payslip", payslipRouter);
 app.use("/schedule", scheduleRouter);
+app.use("/users", usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

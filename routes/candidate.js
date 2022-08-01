@@ -42,6 +42,7 @@ router.get("/", async (req, res) => {
         });
     }
 });
+
 router.post('/', Candidate_Validator(), async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

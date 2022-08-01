@@ -235,7 +235,7 @@
                     </div>
                      <div class="sub-heading2">
                         <p class="bdue">Balance Due: </p>
-                        <p class="data">{{currency}}{{balance_due}}</p>
+                        <p class="data">{{balance_due}}</p>
                     </div>
 
                     </div>
@@ -249,11 +249,11 @@
                         <tr>
                             <th class = "w-40">Item</th>
                             <th class="w-10">Quantity</th>
-                            <th class="w-10">Rate ({{currency}}) </th>
-                            <th class="w-10">Amount ({{currency}}) </th>
+                            <th class="w-10">Rate</th>
+                            <th class="w-10">Amount</th>
                         </tr>
                     </thead>
-                    <tbody> 
+                    <tbody>
                         {{#each items}}
                         <tr>
                             <td class="p-40">{{item}}</td>
@@ -261,43 +261,33 @@
                             <td>{{rate}}</td>
                             <td>{{amount}}</td>
                         </tr>
-                {{/each}} 
-                    </tbody>  
+                {{/each}}
+                    </tbody>
                 </table>
                     <div class="col-7">
                         <div class="row1">
                             <p class="sub-heading3">Sub Total:</p>
-                            <p class="data">{{currency}}{{sub_total}}</p>
+                            <p class="data">{{sub_total}}</p>
                         </div>
-                       
+                        {{#if tax}}
                         <div class="row1">
-
-                            <p class="sub-heading3">GST:</p>
-                            {{#areEqual tax_type "flat"}} 
-                            <p class="data">{{currency}}{{tax}}</p>
-                            {{else}}
-                            <p class="data">{{tax}}{{tax_type}}</p>
-                            {{/areEqual}}
-
+                            <p class="sub-heading3">GST({{tax}}):</p>
+                            <p class="data">{{gstAmount}}</p>
                         </div> 
-                     
-                        
+                        {{/if}}
+                        {{#if discount}}
                         <div class="row1">
                             <p class="sub-heading3">Discount:</p>
-                             {{#areEqual discount_type "flat"}}
-                            <p class="data">{{currency}}{{discount}}</p>
-                            {{else}}
-                            <p class="data">{{discount}}{{discount_type}}</p>
-                            {{/areEqual}}
+                            <p class="data">{{discount}}</p>
                         </div>
-                       
+                        {{/if}}
                          <div class="row1">
                             <p class="sub-heading3">Total:</p>
-                            <p class="data">{{currency}}{{total}}</p>
+                            <p class="data">{{total}}</p>
                         </div>
                         <div class="row1">
                             <p class="sub-heading3">Amount Paid:</p>
-                            <p class="data">{{currency}}{{amount_paid}}</p>
+                            <p class="data">{{amount_paid}}</p>
                         </div>
                     </div>
                 <div class="col">

@@ -1,17 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 
-
 //Dependencies Imported :
 var express = require("express");
 var router = express.Router();
 var mongoose = require("mongoose");
-var path = require("path");
 var fs = require("fs");
 var puppeteer = require("puppeteer");
 var handlebars = require("handlebars");
 const { validationResult } = require("express-validator");
-
 
 //Middleware's Imported :
 var SF_Pag = require("../middlewares/search_functionality-Pagination");          //Middleware for Search-Functionality and Pagination
@@ -19,6 +16,7 @@ var SF_Pag = require("../middlewares/search_functionality-Pagination");         
 
 //Models Imported :
 var Payslip =  require("../models/payslip");
+var Invoice = require("../models/invoice");
 
 
 //Validations Imported :
@@ -49,6 +47,7 @@ router.get("/",SF_Pag(Payslip), async(req, res)=>{
 
 
 
+
 //POST Request for pdf generation :
 router.post("/", Payslip_Validator(), async(req, res)=>{
 
@@ -71,6 +70,7 @@ router.post("/", Payslip_Validator(), async(req, res)=>{
     const {    
     candidate,
     candidate_id,
+    type,
     date,
     Designation,
     assigned,
@@ -95,6 +95,7 @@ router.post("/", Payslip_Validator(), async(req, res)=>{
         _id: new mongoose.Types.ObjectId(),
         candidate,
         candidate_id,
+        type,
         date,
         Designation,
         assigned,
@@ -263,7 +264,7 @@ router.delete("/:payslip_id", async(req, res)=>{
 });
 
 //PATCH Request for client ID :
-router.patch("/:payslip_id", Payslip_Validator(), async (req, res) => {
+router.put("/:payslip_id", Payslip_Validator(), async (req, res) => {
 
     //Error Handling for Validations :
     const errors = validationResult(req);
@@ -275,19 +276,16 @@ router.patch("/:payslip_id", Payslip_Validator(), async (req, res) => {
                 "success": false,
                 "code": 400,
                 "message": errors.array()[0].msg
-                
             }
         });
     }
-
     try {
 
         //Finding client by ID :
         const id = req.params.payslip_id;
-        const payslip = await payslip.findOne({ _id: id, isActive: true });
+        let payslip = await Payslip.findOne({ _id: id, isActive: true });
 
         if (payslip == null) {
-
             //Response if client not found :
             res.status(404).json({
                 "status": {
@@ -298,34 +296,8 @@ router.patch("/:payslip_id", Payslip_Validator(), async (req, res) => {
             
             });
         } else {
-
-            const { candidate,date, assigned, others,other_tax, remarks,Designation,Basic,D_allow,HR_allow,Bonus,
-                conveyance,total_earnings,prof_tax,p_f_employer,p_f_employee,total_tax,td_S,net_deductions,net_salary,} = req.body;
-
-            //Updating client :
-            payslip.candidate = candidate;
-            payslip.assigned = assigned;
-            payslip.Bonus = Bonus;
-            payslip.others = others;
-            payslip.other_tax = other_tax;
-            payslip.remarks = remarks;
-            payslip.date=date;
-            payslip.Designation=Designation;
-            payslip.Basic = Basic;
-            payslip.D_allow = D_allow;
-            payslip.HR_allow = HR_allow;
-            payslip.Bonus = Bonus;
-            payslip.conveyance=conveyance;
-            payslip.total_earnings=total_earnings;
-            payslip.prof_tax=prof_tax;
-            payslip.p_f_employee=p_f_employee;
-            payslip.p_f_employer=p_f_employer;
-            payslip.total_tax=total_tax;
-            payslip.td_S=td_S;
-            payslip.net_deductions=net_deductions;
-            payslip.net_salary=net_salary;
-            const new_payslip = await payslip.save();
-
+            
+            payslip = await Payslip.findByIdAndUpdate(id,req.body);
             //Response :
             res.status(200).json({
                 "status": {
@@ -333,7 +305,7 @@ router.patch("/:payslip_id", Payslip_Validator(), async (req, res) => {
                     "code": 204,
                     "message": constants.MODEL_UPDATED
                 },
-                "data": new_payslip
+                
             });
         }
 
@@ -351,6 +323,379 @@ router.patch("/:payslip_id", Payslip_Validator(), async (req, res) => {
 });
 
 
+router.get("/filter/:newdate", async (req, res) => {
 
+    try {
+
+        //Finding schedule by ID :
+        const id = req.params.newdate;
+        const filterdate = await Payslip.find({ date : id, isActive: true });
+
+        if (filterdate == null) {
+
+            //Response if schedule not found :
+            res.status(404).json({
+                "status": {
+                    "success": false,
+                    "code": 404,
+                    "message": constants.MODEL_NOT_FOUND
+                }
+            });
+        } else {
+
+            //Response :
+            res.status(200).json({
+                "status": {
+                    "success": true,
+                    "code": 200,
+                    "message": constants.SUCCESSFUL
+                },
+                "data": filterdate
+            });
+        }
+
+        //Error Catching :
+    } catch (err) {
+        res.status(500).json({
+            "status": {
+                "success": false,
+                "code": 500,
+                "message": err.message
+            }
+        });
+        console.log(err);
+    }
+});
+
+function getMonths(mon){
+    return new Date(mon).getMonth()+1
+ } 
+
+ function getyears(mon){
+    return new Date(mon).getFullYear()
+ } 
+ 
+async function getData(frmdate,tdate,fromdate,todate){
+    const returnData={
+      totalAmount:0,
+      gST:0,
+      tDs:0,
+      salaries:0,
+      payslipList:[],
+      invoiceList:[]
+    };
+    var invoiceData =  await Invoice.find({isActive: true });
+    var filterData =invoiceData.filter(function(a) {
+        tempDate=a.date
+        tempDate=tempDate+"Z"
+        var temp = new Date(tempDate);
+        if(temp>=frmdate && temp<=tdate){
+            return true
+        }
+        return false
+    });
+for(i=0;i<filterData.length;i++)
+{
+    var amount = filterData[i].balance_due
+    amount=amount.replace(/\₹|,/g, "");
+    amount=amount.replace(/\£|,/g, "");
+    
+    if (amount== "" || amount =="NaN"){
+        amount=0}
+    if(amount[2]=="$"){
+        amount=amount.replace(/\$|,/g, "");
+        amount=amount.replace(/U/g, "");
+        amount=amount.replace(/S/g, "");
+    }
+    returnData.totalAmount+=parseInt(amount)
+    if(filterData[i].gstAmount){
+        filterData[i].gstAmount.replace("\u20b9", "")
+        returnData.gST+=parseInt(filterData[i].gstAmount)
+    }
+    // if(!filterData[i].gstAmount){
+    //     amount=amount*(1-filterData[i].tax)
+    //     returnData.gST+=parseInt(filterData[i].gstAmount)
+    // }
+}
+
+var salaryData =  await Payslip.find({isActive: true });
+var filterData =salaryData.filter(function(a) {
+    tempDate=a.date
+    tempDate=tempDate+"Z"
+    var temp = new Date(tempDate);
+    if(temp>=frmdate && temp<=tdate){
+        return true
+    }
+    return false
+});
+
+for(i=0;i<filterData.length;i++)
+{
+var amount = filterData[i].net_salary
+var tds = filterData[i].td_S
+returnData.salaries+=parseFloat(amount)
+returnData.tDs+=parseFloat(tds)
+}
+
+    var total = (getMonths(todate)-getMonths(fromdate)+1) + 12*(getyears(todate)-getyears(fromdate))
+
+    currmnth=getMonths(fromdate)
+    curryear=getyears(fromdate)
+    var salaryData =  await Payslip.find({isActive: true});
+    for (var i=0;i<total;i++){
+    var temp =salaryData.filter(function(a) {
+    tempMonth=getMonths(a.date)
+    tempYear=getyears(a.date)
+    if(tempMonth === currmnth && tempYear === curryear){
+        return true
+    }
+    return false
+    });
+    (returnData.payslipList).push(temp)
+    
+    if(currmnth<12){
+    currmnth+=1
+    }
+    else{
+    currmnth-=12
+    curryear+=1        
+    }
+}
+    currmnth=getMonths(fromdate)
+    curryear=getyears(fromdate)
+    var salaryData =  await Invoice.find({isActive: true});
+    for (var i=0;i<total;i++){
+    temp =salaryData.filter(function(a) {
+    tempMonth=getMonths(a.date)
+    tempYear=getyears(a.date)
+    if(tempMonth === currmnth && tempYear === curryear){
+        return true
+    }
+    return false
+    });
+    (returnData.invoiceList).push(temp)
+
+    if(currmnth<12){
+    currmnth+=1
+    }
+    else{
+    currmnth-=12
+    curryear+=1        
+    }
+    }
+return returnData
+
+}
+router.post("/total/", async (req, res) => {
+    const {
+    fromdate,
+    todate
+    } = req.body
+
+    const state={fromdate,todate};
+    const startmnth =getMonths(state.fromdate);
+    const endmnth = getMonths(state.todate);
+    const startyear = getyears(state.fromdate)
+    const endyear = getyears(state.todate)
+    var frmdate = startyear+"-"+startmnth+"Z";
+    frmdate=new Date(frmdate)
+    var tdate=new Date(endyear,endmnth)
+
+    const ans= await getData(frmdate,tdate,fromdate,todate)
+
+    //Response :
+        res.status(201).send({
+            "status": {
+                "success": true,
+                "code": 201,
+                "message": constants.MODEL_CREATE
+            },
+            "data": ans
+        });
+});
+
+async function gethalfData(frmdate,tdate){
+
+    const returnData={
+      gST:0,
+      tDs:0,
+      salaries:0  
+    };
+    var invoiceData =  await Invoice.find({isActive: true });
+    var filterData =invoiceData.filter(function(a) {
+        tempDate=a.date
+        tempDate=tempDate+"Z"
+        var temp = new Date(tempDate);
+        if(temp>=frmdate && temp<=tdate){
+            return true
+        }
+        return false
+    });
+for(i=0;i<filterData.length;i++)
+{  
+    if(filterData[i].gstAmount){
+        filterData[i].gstAmount.replace("\u20b9", "")
+        returnData.gST+=parseInt(filterData[i].gstAmount)
+    } 
+}
+
+var salaryData =  await Payslip.find({isActive: true });
+var filterData =salaryData.filter(function(a) {
+    tempDate=a.date
+    tempDate=tempDate+"Z"
+    var temp = new Date(tempDate);
+    if(temp>=frmdate && temp<=tdate){
+        return true
+    }
+    return false
+});
+for(i=0;i<filterData.length;i++)
+{
+var amount = filterData[i].net_salary
+var tds = filterData[i].td_S
+returnData.salaries+=parseFloat(amount)
+returnData.tDs+=parseFloat(tds)
+}
+
+
+return returnData
+}
+
+router.post("/half/", async (req, res) => {
+    const {
+    fromdate,
+    todate
+    } = req.body
+
+    const state={fromdate,todate};
+    const startmnth =getMonths(state.fromdate);
+    const endmnth = getMonths(state.todate);
+    const startyear = getyears(state.fromdate)
+    const endyear = getyears(state.todate)
+    var frmdate = startyear+"-"+startmnth+"Z";
+    frmdate=new Date(frmdate)
+    var tdate=new Date(endyear,endmnth)
+
+
+    const ans= await gethalfData(frmdate,tdate)
+
+        res.status(201).send({
+            "status": {
+                "success": true,
+                "code": 201,
+                "message": constants.MODEL_CREATE
+            },
+            "data": ans
+        });
+});
+
+router.post("/tds/", async (req, res) => {
+
+    try {
+        const {
+            fromdate,
+            todate
+            } = req.body
+    
+        const state={fromdate,todate};
+        const ans= await gettdsData(state)
+        
+            //Response :
+            res.status(200).json({
+                "status": {
+                    "success": true,
+                    "code": 200,
+                    "message": constants.SUCCESSFUL
+                },
+                "data": ans
+            });
+        
+
+
+        //Error Catching :
+    } catch (err) {
+        res.status(500).json({
+            "status": {
+                "success": false,
+                "code": 500,
+                "message": err.message
+            }
+        });
+        console.log(err);
+    }
+});
+
+async function gettdsData(state){
+
+    const returnData={
+        fullTimedata:[],
+        internData:[]
+    };
+        var total = (getMonths(state.todate)-getMonths(state.fromdate)+1) + 12*(getyears(state.todate)-getyears(state.fromdate))
+        currmnth=getMonths(state.fromdate)
+        curryear=getyears(state.fromdate)
+    var salaryData =  await Payslip.find({isActive: true, type:"Full-Time"});
+    var amount=0
+    for (var i=0;i<total;i++){
+        var temp =salaryData.filter(function(a) {
+        tempMonth=getMonths(a.date)
+        tempYear=getyears(a.date)
+        if(tempMonth === currmnth && tempYear === curryear){
+            return true
+        }
+        return false
+    });
+    let sum=0
+    temp.map(a=>
+        sum+=parseFloat(a.td_S))
+    temp.push(sum)
+   
+    var x= parseFloat(amount) + parseFloat((sum));
+    amount=x.toFixed(2)
+    if(temp.length!=0){(returnData.fullTimedata).push(temp)
+    }
+    if(currmnth<12){
+        currmnth+=1
+    }
+    else{
+        currmnth-=12
+        curryear+=1        
+    }
+}
+(returnData.fullTimedata).push(amount)
+currmnth=getMonths(state.fromdate)
+curryear=getyears(state.fromdate)
+amount=0
+var salaryData =  await Payslip.find({isActive: true, type:"Internship"});
+    for (var i=0;i<total;i++){
+        var temp =salaryData.filter(function(a) {
+        tempMonth=getMonths(a.date)
+        tempYear=getyears(a.date)
+        if(tempMonth === currmnth && tempYear === curryear){
+            return true
+        }
+        return false
+    });
+    sum=0
+    temp.map(a=>
+        sum+=parseFloat(a.td_S))
+    temp.push(sum)
+   
+    x= parseFloat(amount) + parseFloat((sum));
+    amount=x.toFixed(2)
+
+    if(temp.length!=0){(returnData.internData).push(temp)
+    }
+    if(currmnth<12){
+        currmnth+=1
+    }
+    else{
+        currmnth-=12
+        curryear+=1        
+    }
+}
+(returnData.internData).push(amount)
+return returnData
+}
 
 module.exports = router;

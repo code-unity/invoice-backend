@@ -37,7 +37,7 @@ var scheduleRouter = require("./routes/schedule");
 var invoiceFilterRouter = require("./routes/invoiceFilter");
 var payslipRouter = require("./routes/payslip");
 var usersRouter = require("./routes/users");
-
+var scheduleStatusRouter = require("./routes/scheduleStatus")
 //Express Application :
 var app = express();
 

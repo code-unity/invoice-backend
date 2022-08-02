@@ -53,6 +53,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 //API Routes :
+
 app.use("/admin", adminRouter);
 app.use("/client", clientRouter);
 app.use("/invoice", invoiceRouter);
@@ -62,6 +63,7 @@ app.use("/invoiceFilter", invoiceFilterRouter.router);
 app.use("/payslip", payslipRouter);
 app.use("/schedule", scheduleRouter);
 app.use("/users", usersRouter);
+app.use('/scheduleStatus',scheduleStatusRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
